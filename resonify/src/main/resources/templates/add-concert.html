@@ -1,0 +1,28 @@
+<div th:fragment="content">
+    <h1>Add Concert</h1>
+    <form th:action="@{/web/concerts}" th:object="${concert}" method="post">
+        <label for="theater">Theater:</label>
+        <select id="theater" th:field="*{theater}" required>
+            <option value="">--Select Theater--</option>
+            <option th:each="t : ${theaters}" th:value="${t.id}"
+                    th:text="${t.name + ' (' + t.city.name + ', ' + t.city.country.name + ')'}"></option>
+        </select>
+
+        <label for="name">Concert Name:</label>
+        <input type="text" id="name" th:field="*{name}" required/>
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" th:field="*{date}" required/>
+
+        <label for="ticket">Ticket Info:</label>
+        <input type="text" id="ticket" th:field="*{ticket}"/>
+
+        <label for="artists">Artists (comma separated):</label>
+        <input type="text" id="artists" th:field="*{artists}"/>
+
+        <label for="photos">Photos (comma separated URLs):</label>
+        <input type="text" id="photos" th:field="*{photos}"/>
+
+        <button type="submit">Add Concert</button>
+    </form>
+</div>

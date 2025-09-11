@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${pageTitle}">Resonify</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; display: flex; height: 100vh; }
+        nav.sidebar { width: 220px; background-color: #1976d2; color: white; padding: 20px; box-sizing: border-box; }
+        nav.sidebar ul { list-style: none; padding: 0; }
+        nav.sidebar li { margin-bottom: 10px; }
+        nav.sidebar a { color: white; text-decoration: none; display: block; padding: 6px 10px; border-radius: 4px; }
+        nav.sidebar a.active { background-color: #0d47a1; font-weight: bold; }
+        main.content { flex: 1; padding: 20px; overflow-y: auto; }
+        .back-home { margin-top: 20px; display: inline-block; padding: 6px 10px; background-color: #1976d2; color: white; text-decoration: none; border-radius: 4px; }
+    </style>
+</head>
+<body>
+<nav class="sidebar">
+    <h2>Menu</h2>
+    <ul>
+        <li><a th:href="@{/}" th:classappend="${activePage=='home'} ? 'active' : ''">Home</a></li>
+        <li><a th:href="@{/web/concerts/list}" th:classappend="${activePage=='concerts'} ? 'active' : ''">Concerts
+            List</a></li>
+        <li><a th:href="@{/web/concerts/add}" th:classappend="${activePage=='addConcert'} ? 'active' : ''">Add
+            Concert</a></li>
+        <li><a th:href="@{/web/theaters/list}" th:classappend="${activePage=='theaters'} ? 'active' : ''">Theaters
+            List</a></li>
+        <li><a th:href="@{/web/theaters/add}" th:classappend="${activePage=='addTheater'} ? 'active' : ''">Add
+            Theater</a></li>
+        <li><a th:href="@{/web/cities/list}" th:classappend="${activePage=='cities'} ? 'active' : ''">Cities List</a>
+        </li>
+        <li><a th:href="@{/web/cities/add}" th:classappend="${activePage=='addCity'} ? 'active' : ''">Add City</a></li>
+    </ul>
+</nav>
+
+<main class="content">
+    <div th:replace="${contentTemplate} :: content"></div>
+</main>
+</body>
+</html>

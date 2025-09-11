@@ -1,0 +1,16 @@
+<div th:fragment="content">
+    <h1>Add City</h1>
+    <form th:action="@{/web/cities}" th:object="${city}" method="post">
+        <label for="name">City Name:</label>
+        <input type="text" id="name" th:field="*{name}" required/>
+
+        <label for="country">Country:</label>
+        <select id="country" th:field="*{country}" required>
+            <option value="">--Select Country--</option>
+            <option th:each="c : ${countries}" th:value="${c.id}"
+                    th:text="${c.name + ' (' + c.continent.name + ')'}"></option>
+        </select>
+
+        <button type="submit">Add City</button>
+    </form>
+</div>

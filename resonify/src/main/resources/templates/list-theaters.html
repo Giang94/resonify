@@ -1,0 +1,37 @@
+<div th:fragment="content" >
+    <h1>All Theaters</h1>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Lat</th>
+            <th>Lng</th>
+            <th>City</th>
+            <th>Country</th>
+            <th>Photo</th>
+            <th>Actions</th>
+        </tr>
+        <tr th:each="t : ${theaters}">
+            <form th:action="@{/web/theaters/{id}(id=${t.id})}" method="post">
+                <input type="hidden" name="_method" value="put"/>
+                <td th:text="${t.id}"></td>
+                <td><input type="text" name="name" th:value="${t.name}"/></td>
+                <td><input type="text" name="address" th:value="${t.address}"/></td>
+                <td><input type="number" step="any" name="lat" th:value="${t.lat}"/></td>
+                <td><input type="number" step="any" name="lng" th:value="${t.lng}"/></td>
+                <td>
+                    <select name="city.id">
+                        <option th:each="c : ${cities}"
+                                th:value="${c.id}"
+                                th:text="${c.name}"
+                                th:selected="${c.id == t.city.id}">
+                        </option>
+                    </select>
+                </td>
+                <td><img th:if="${t.photo}" th:src="${t.photo}" style="width:100px"/></td>
+                <td><button type="submit">Save</button></td>
+            </form>
+        </tr>
+    </table>
+</div>

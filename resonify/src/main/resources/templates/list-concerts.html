@@ -1,0 +1,21 @@
+<div th:fragment="content">
+    <h1>All Concerts</h1>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Theater</th>
+            <th>City</th>
+            <th>Country</th>
+        </tr>
+        <tr th:each="c : ${concerts}">
+            <td th:text="${c.id}"></td>
+            <td th:text="${c.name}"></td>
+            <td th:text="${c.date}"></td>
+            <td th:text="${c.theater.name}"></td>
+            <td th:text="${c.theater.city.name}"></td>
+            <td th:text="${c.theater.city.country.name}"></td>
+        </tr>
+    </table>
+</div>

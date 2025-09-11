@@ -1,0 +1,11 @@
+<div th:fragment="content">
+  <h1>All Cities</h1>
+  <table border="1" cellpadding="5">
+    <tr><th>ID</th><th>Name</th><th>Country</th></tr>
+    <tr th:each="c : ${cities}">
+      <td th:text="${c.id}"></td>
+      <td th:text="${c.name}"></td>
+      <td th:text="${c.country.name}"></td>
+    </tr>
+  </table>
+</div>
