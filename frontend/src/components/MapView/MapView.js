@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, ZoomControl } from "react-leaflet";
 import groupByLevel from "../utils/groupByLevel";
 import { SyncZoom } from "./SyncZoom";
 import { createCheckinIcon } from "../utils/leafletIcon";
+import MapResetButton from "./MapResetButton.js";
 import "./MapView.css";
 
 export default function MapView() {
   const [concerts, setConcerts] = useState([]);
-  const [zoomLevel, setZoomLevel] = useState("continent");
+  const [zoomLevel, setZoomLevel] = useState("country");
   const [mapCenter, setMapCenter] = useState([20, 0]);
   const [mapZoom, setMapZoom] = useState(3);
 
@@ -23,13 +24,22 @@ export default function MapView() {
   const dataToShow = groupByLevel(concerts, zoomLevel);
 
   // Panel open if theaterConcerts is set and zoomLevel is theaterDetails
-  const panelOpen = zoomLevel === "theaterDetails" && theaterConcerts.length > 0;
+  const panelOpen = theaterConcerts.length > 0;
 
-  // Handler to close the panel
-  const handleMapClick = () => {
+  const handlePanelClose = () => {
+    setTheaterConcerts([]);
+  };
+
+  const handleMapClick = (e) => {
+    // Prevent closing when clicking map controls or markers
+    if (e.target.classList.contains('leaflet-control') ||
+      e.target.closest('.leaflet-control') ||
+      e.target.classList.contains('leaflet-marker-icon')) {
+      return;
+    }
+
     if (panelOpen) {
-      setZoomLevel("theater");
-      setTheaterConcerts([]);
+      handlePanelClose();
     }
   };
 
@@ -38,9 +48,19 @@ export default function MapView() {
       {/* Only render panel if open */}
       {panelOpen && (
         <div className="concert-panel open">
-          <h2>Concerts</h2>
+          <h2>Concerts at {theaterConcerts[0].theater.name}</h2>
           {theaterConcerts.map((concert) => (
-            <div className="concert-item" key={concert.id}>
+            <div
+              className="concert-item"
+              key={concert.id}
+              style={{
+                background: concert.photos?.[0]
+                  ? `linear-gradient(rgba(42, 42, 61, 0.2), rgba(42, 42, 61, 0.2)), url(${concert.photos[0]})`
+                  : '#2a2a3d',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+              }}
+            >
               <h3>{concert.name}</h3>
               <div>{concert.date}</div>
               <small>{concert.artist}</small>
@@ -65,14 +85,23 @@ export default function MapView() {
             [85, 180],
           ]}
           style={{ height: "100vh", width: "100%" }}
+          zoomControl={false}
         >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
           />
 
+          <div style={{ zIndex: 1000 }}>
+            <ZoomControl position="topright" />
+          </div>
           <SyncZoom setZoomLevel={setZoomLevel} setMapZoom={setMapZoom} />
-
+          <MapResetButton
+            setZoomLevel={setZoomLevel}
+            setMapZoom={setMapZoom}
+            setMapCenter={setMapCenter}
+            handlePanelClose={handlePanelClose}
+          />
           {Object.entries(dataToShow).map(([key, items]) => {
             const first = items[0];
             const count = items.length;
@@ -93,12 +122,7 @@ export default function MapView() {
                   click: (e) => {
                     const map = e.target._map;
 
-                    if (zoomLevel === "continent") {
-                      setZoomLevel("country");
-                      setMapCenter([first.theater.lat, first.theater.lng]);
-                      setMapZoom(4);
-                      map.flyTo([first.theater.lat, first.theater.lng], 4);
-                    } else if (zoomLevel === "country") {
+                    if (zoomLevel === "country") {
                       setZoomLevel("city");
                       setMapCenter([first.theater.lat, first.theater.lng]);
                       setMapZoom(7);
@@ -121,9 +145,7 @@ export default function MapView() {
                   mouseover: (e) => {
                     let popupContent = '';
 
-                    if (zoomLevel === "continent") {
-                      popupContent = `<div style="text-align:center;">${first.theater.city.country.continent.name}</div>`;
-                    } else if (zoomLevel === "country") {
+                    if (zoomLevel === "country") {
                       popupContent = `<div style="text-align:center;">${first.theater.city.country.name}</div>`;
                     } else if (zoomLevel === "city") {
                       popupContent = `<div style="text-align:center;">${first.theater.city.name}</div>`;

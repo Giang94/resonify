@@ -1,16 +1,28 @@
 <div th:fragment="content">
     <h1>Add City</h1>
-    <form th:action="@{/web/cities}" th:object="${city}" method="post">
-        <label for="name">City Name:</label>
-        <input type="text" id="name" th:field="*{name}" required/>
 
-        <label for="country">Country:</label>
-        <select id="country" th:field="*{country}" required>
-            <option value="">--Select Country--</option>
-            <option th:each="c : ${countries}" th:value="${c.id}"
-                    th:text="${c.name + ' (' + c.continent.name + ')'}"></option>
-        </select>
+    <div style="max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+        <form th:action="@{/web/cities}" th:object="${city}" method="post">
+            <div style="margin-bottom: 15px;">
+                <label for="name">City Name:</label>
+                <input type="text" id="name" th:field="*{name}" required
+                       style="width: 100%; padding: 8px; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc;"/>
+            </div>
 
-        <button type="submit">Add City</button>
-    </form>
+            <div style="margin-bottom: 15px;">
+                <label for="country">Country:</label>
+                <select id="country" th:field="*{country}" required class="searchable-select"
+                        style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;">
+                    <option value="">--Select Country--</option>
+                    <option th:each="c : ${countries}" th:value="${c.id}"
+                            th:text="${c.name + ' (' + c.continent.name + ')'}"></option>
+                </select>
+            </div>
+
+            <button type="submit"
+                    style="padding: 10px 20px; background-color: #1976d2; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                Add City
+            </button>
+        </form>
+    </div>
 </div>

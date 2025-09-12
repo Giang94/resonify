@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="icon" type="image/png" th:href="@{/icon/favicon.png}"/>
     <title th:text="${pageTitle}">Resonify</title>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- Select2 JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <style>
         body { font-family: Arial, sans-serif; margin: 0; display: flex; height: 100vh; }
         nav.sidebar { width: 220px; background-color: #1976d2; color: white; padding: 20px; box-sizing: border-box; }
@@ -36,5 +42,27 @@
 <main class="content">
     <div th:replace="${contentTemplate} :: content"></div>
 </main>
+<script>
+    function initSearchableSelects() {
+        $('.searchable-select').each(function() {
+            if (!$(this).hasClass('select2-hidden-accessible')) { // prevent double init
+                $(this).select2({
+                    width: '100%',
+                    placeholder: "--Select--",
+                    allowClear: true
+                });
+            }
+        });
+
+        $('.searchable-select').on('select2:open', function () {
+            $('.select2-container--open .select2-search__field').focus();
+        });
+    }
+
+    // Run on page load
+    $(document).ready(function () {
+        initSearchableSelects();
+    });
+</script>
 </body>
 </html>

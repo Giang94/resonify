@@ -1,28 +1,54 @@
 <div th:fragment="content">
-    <h1>Add Concert</h1>
-    <form th:action="@{/web/concerts}" th:object="${concert}" method="post">
-        <label for="theater">Theater:</label>
-        <select id="theater" th:field="*{theater}" required>
-            <option value="">--Select Theater--</option>
-            <option th:each="t : ${theaters}" th:value="${t.id}"
-                    th:text="${t.name + ' (' + t.city.name + ', ' + t.city.country.name + ')'}"></option>
-        </select>
+    <h1 style="text-align:center; margin-bottom: 20px;">Add Concert</h1>
 
-        <label for="name">Concert Name:</label>
-        <input type="text" id="name" th:field="*{name}" required/>
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+        <form th:action="@{/web/concerts}" th:object="${concert}" method="post">
 
-        <label for="date">Date:</label>
-        <input type="date" id="date" th:field="*{date}" required/>
+            <div style="margin-bottom: 15px;">
+                <label for="theater">Theater:</label>
+                <select id="theater" th:field="*{theater}" required class="searchable-select"
+                        style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;">
+                    <option value="">--Select Theater--</option>
+                    <option th:each="t : ${theaters}" th:value="${t.id}"
+                            th:text="${t.name + ' (' + t.city.name + ', ' + t.city.country.name + ')'}"></option>
+                </select>
+            </div>
 
-        <label for="ticket">Ticket Info:</label>
-        <input type="text" id="ticket" th:field="*{ticket}"/>
+            <div style="margin-bottom: 15px;">
+                <label for="name">Concert Name:</label>
+                <input type="text" id="name" th:field="*{name}" required
+                       style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;" />
+            </div>
 
-        <label for="artists">Artists (comma separated):</label>
-        <input type="text" id="artists" th:field="*{artists}"/>
+            <div style="margin-bottom: 15px;">
+                <label for="date">Date:</label>
+                <input type="date" id="date" th:field="*{date}" required
+                       style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;" />
+            </div>
 
-        <label for="photos">Photos (comma separated URLs):</label>
-        <input type="text" id="photos" th:field="*{photos}"/>
+            <div style="margin-bottom: 15px;">
+                <label for="ticket">Ticket Info:</label>
+                <input type="text" id="ticket" th:field="*{ticket}"
+                       style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;" />
+            </div>
 
-        <button type="submit">Add Concert</button>
-    </form>
+            <div style="margin-bottom: 15px;">
+                <label for="artists">Artists (comma separated):</label>
+                <input type="text" id="artists" th:field="*{artists}"
+                       style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;" />
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label for="photos">Photos (comma separated URLs):</label>
+                <input type="text" id="photos" th:field="*{photos}"
+                       style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;" />
+            </div>
+
+            <button type="submit"
+                    style="padding: 10px 20px; background-color: #1976d2; color: white; border: none; border-radius: 4px; cursor: pointer; width: 100%;">
+                Add Concert
+            </button>
+
+        </form>
+    </div>
 </div>

@@ -8,7 +8,7 @@ export default function ConcertMarker({
   const first = items[0];
   const count = items.length;
 
-  const zoomMapping = { continent: 2, country: 4, city: 7, cityDetail: 12 };
+  const zoomMapping = { country: 4, city: 7, cityDetail: 12 };
 
   return (
     <Marker
@@ -19,11 +19,7 @@ export default function ConcertMarker({
         click: (e) => {
           const map = e.target._map;
 
-          if (zoomLevel === "continent") {
-            setZoomLevel("country");
-            setMapCenter([first.theater.lat, first.theater.lng]);
-            setMapZoom(zoomMapping["country"]);
-          } else if (zoomLevel === "country") {
+          if (zoomLevel === "country") {
             setZoomLevel("city");
             setMapCenter([first.theater.lat, first.theater.lng]);
             setMapZoom(zoomMapping["city"]);

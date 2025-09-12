@@ -7,7 +7,7 @@ import { createCheckinIcon } from "../utils/leafletIcon";
 
 export default function MapView() {
   const [concerts, setConcerts] = useState([]);
-  const [zoomLevel, setZoomLevel] = useState("continent");
+  const [zoomLevel, setZoomLevel] = useState("country");
   const [mapCenter, setMapCenter] = useState([20, 0]);
   const [mapZoom, setMapZoom] = useState(3);
 
@@ -59,12 +59,7 @@ export default function MapView() {
                 click: (e) => {
                   const map = e.target._map;
 
-                  if (zoomLevel === "continent") {
-                    setZoomLevel("country");
-                    setMapCenter([first.theater.lat, first.theater.lng]);
-                    setMapZoom(3);
-                    map.flyTo([first.theater.lat, first.theater.lng], 3);
-                  } else if (zoomLevel === "country") {
+                  if (zoomLevel === "country") {
                     setZoomLevel("city");
                     setMapCenter([first.theater.lat, first.theater.lng]);
                     setMapZoom(6);

@@ -4,10 +4,9 @@ import com.app.resonify.model.Concert;
 import com.app.resonify.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/web/concerts")
@@ -46,6 +45,12 @@ public class WebConcertController {
     @PostMapping
     public String saveConcert(@ModelAttribute Concert concert) {
         concertRepo.save(concert);
+        return "redirect:/web/concerts/list";
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteConcert(@PathVariable UUID id) {
+        concertRepo.deleteById(id);
         return "redirect:/web/concerts/list";
     }
 }

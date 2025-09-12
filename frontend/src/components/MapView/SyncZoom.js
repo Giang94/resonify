@@ -9,8 +9,7 @@ export function SyncZoom({ setZoomLevel, setMapZoom }) {
       const z = map.getZoom();
       setMapZoom(z);
 
-      if (z < 4) setZoomLevel("continent");
-      else if (z < 7) setZoomLevel("country");
+      if (z < 7) setZoomLevel("country");
       else if (z < 12) setZoomLevel("city");
       else if (z < 18) setZoomLevel("theater");
       else setZoomLevel("theaterDetails")

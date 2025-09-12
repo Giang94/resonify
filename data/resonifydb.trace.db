@@ -7,3 +7,6 @@ UPDATE "PUBLIC"."THEATERS" SET "LAT"=? ,"LNG"=? ,"CITY_ID"=? ,"ID"=? ,"ADDRESS"=
 2025-09-11 08:41:25.134248+07:00 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLDataException: Value too long for column "PHOTO CHARACTER VARYING(255)": "'data:image/jpeg;base64,UklGRp5iAgBXRUJQVlA4IJJiAgBwWgidASpDB7ACPm0ylUikIqSqJNPK... (208459)"; SQL statement:
 insert into concert_photos (concert_id,photo) values (?,?) [22001-224]
+2025-09-11 17:56:22.960637+07:00 jdbc[73]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CONCERT" not found; SQL statement:
+SELECT * FROM CONCERT [42102-224]

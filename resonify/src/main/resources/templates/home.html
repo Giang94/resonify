@@ -1,3 +1,65 @@
 <div th:fragment="content">
-  <h1>Resonify Home</h1>
+  <div style="text-align:center; margin-top: 40px;">
+    <h1 style="font-size: 2.5em; color: #1976d2; margin-bottom: 10px;">
+      🎶 Welcome to Resonify 🎭
+    </h1>
+    <p style="font-size: 1.2em; color: #555; margin-bottom: 30px;">
+      Your personal journal of <b>concerts, theaters, and musical adventures</b>.
+    </p>
+
+    <!-- Stats section -->
+    <div style="display:flex; justify-content:center; gap:30px; flex-wrap:wrap; margin-bottom: 40px;">
+      <div style="width:150px; padding:15px; border-radius:10px; background:#f4f7fb;
+                        box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+        <h2 style="color:#1976d2; margin:0;" th:text="${concertCount}">0</h2>
+        <p style="margin:0; color:#555;">Concerts</p>
+      </div>
+      <div style="width:150px; padding:15px; border-radius:10px; background:#f4f7fb;
+                        box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+        <h2 style="color:#1976d2; margin:0;" th:text="${theaterCount}">0</h2>
+        <p style="margin:0; color:#555;">Theaters</p>
+      </div>
+      <div style="width:150px; padding:15px; border-radius:10px; background:#f4f7fb;
+                        box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+        <h2 style="color:#1976d2; margin:0;" th:text="${cityCount}">0</h2>
+        <p style="margin:0; color:#555;">Cities</p>
+      </div>
+      <div style="width:150px; padding:15px; border-radius:10px; background:#f4f7fb;
+                        box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+        <h2 style="color:#1976d2; margin:0;" th:text="${countryCount}">0</h2>
+        <p style="margin:0; color:#555;">Countries</p>
+      </div>
+    </div>
+
+    <!-- Navigation cards -->
+    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 40px;">
+      <a href="/web/concerts" style="text-decoration: none;">
+        <div style="width: 220px; padding: 20px; border: 1px solid #ddd; border-radius: 10px;
+                            box-shadow: 0 2px 6px rgba(0,0,0,0.1); transition: transform 0.2s; background:white;">
+          <h3 style="color:#1976d2;">🎼 Concerts</h3>
+          <p style="color:#666; font-size: 0.9em;">Browse and manage your concert memories</p>
+        </div>
+      </a>
+
+      <a href="/web/theaters" style="text-decoration: none;">
+        <div style="width: 220px; padding: 20px; border: 1px solid #ddd; border-radius: 10px;
+                            box-shadow: 0 2px 6px rgba(0,0,0,0.1); transition: transform 0.2s; background:white;">
+          <h3 style="color:#1976d2;">🏛️ Theaters</h3>
+          <p style="color:#666; font-size: 0.9em;">Discover where you’ve been and dream of where to go</p>
+        </div>
+      </a>
+
+      <a href="/web/cities" style="text-decoration: none;">
+        <div style="width: 220px; padding: 20px; border: 1px solid #ddd; border-radius: 10px;
+                            box-shadow: 0 2px 6px rgba(0,0,0,0.1); transition: transform 0.2s; background:white;">
+          <h3 style="color:#1976d2;">🌍 Cities</h3>
+          <p style="color:#666; font-size: 0.9em;">Keep track of cities and countries you’ve explored</p>
+        </div>
+      </a>
+    </div>
+
+    <footer style="margin-top: 30px; font-size: 0.9em; color: #888;">
+      Built with ❤️ for music & travel memories
+    </footer>
+  </div>
 </div>

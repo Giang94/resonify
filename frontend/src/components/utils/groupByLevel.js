@@ -5,9 +5,6 @@ export default function groupByLevel(concerts, level) {
     let key;
 
     switch (level) {
-      case "continent":
-        key = c.theater?.city?.country?.continent?.name;
-        break;
       case "country":
         key = c.theater?.city?.country?.name;
         break;

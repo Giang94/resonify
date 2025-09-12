@@ -71,4 +71,10 @@ public class WebTheaterController {
         theaterRepo.save(existed);
         return "redirect:/web/theaters/list";
     }
+
+    @DeleteMapping("/{id}")
+    public String deleteTheater(@PathVariable UUID id) {
+        theaterRepo.deleteById(id);
+        return "redirect:/web/theaters/list";
+    }
 }
