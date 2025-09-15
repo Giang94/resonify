@@ -5,6 +5,7 @@ import { SyncZoom } from "./SyncZoom";
 import { createCheckinIcon } from "../utils/leafletIcon";
 import MapResetButton from "./MapResetButton.js";
 import "./MapView.css";
+import ConcertModal from "./ConcertModal.js";
 
 export default function MapView() {
   const [concerts, setConcerts] = useState([]);
@@ -13,6 +14,7 @@ export default function MapView() {
   const [mapZoom, setMapZoom] = useState(3);
 
   const [theaterConcerts, setTheaterConcerts] = useState([]);
+  const [selectedConcert, setSelectedConcert] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:8080/api/concerts")
@@ -60,6 +62,7 @@ export default function MapView() {
                 backgroundSize: 'cover',
                 backgroundPosition: 'center'
               }}
+              onClick={() => setSelectedConcert(concert)}
             >
               <h3>{concert.name}</h3>
               <div>{concert.date}</div>
@@ -174,6 +177,12 @@ export default function MapView() {
               />
             );
           })}
+          {selectedConcert && (
+            <ConcertModal
+              concert={selectedConcert}
+              onClose={() => setSelectedConcert(null)}
+            />
+          )}
         </MapContainer>
       </div>
     </div>

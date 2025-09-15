@@ -21,27 +21,14 @@
   opacity: 1;
 }
 
-.bg-grid {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-auto-rows: minmax(150px, 1fr);
-  gap: 4px;
-  padding: 4px;
-  background: rgba(0, 0, 0, 0.1);
-  z-index: -1;
-  grid-auto-flow: dense;
-}
-
 .grid-cell {
+  position: relative;
   width: 100%;
   height: 100%;
   background-size: cover;
   background-position: center;
-  transition: opacity 1s ease;
+  transform-style: preserve-3d;
+  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
   min-height: calc(100vh / 4);
 }
 
@@ -52,3 +39,61 @@
   z-index: 1;
 }
 
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  gap: 4px;
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: -1;
+  overflow: hidden;
+}
+
+.grid-cell {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+
+.grid-face {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 1s ease;
+}
+
+/* Pan directions */
+.pan-up {
+  transform: translateY(100%);
+}
+.pan-up.active {
+  transform: translateY(0);
+}
+
+.pan-down {
+  transform: translateY(-100%);
+}
+.pan-down.active {
+  transform: translateY(0);
+}
+
+.pan-left {
+  transform: translateX(100%);
+}
+.pan-left.active {
+  transform: translateX(0);
+}
+
+.pan-right {
+  transform: translateX(-100%);
+}
+.pan-right.active {
+  transform: translateX(0);
+}

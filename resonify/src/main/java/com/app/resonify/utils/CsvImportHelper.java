@@ -74,7 +74,12 @@ public class CsvImportHelper {
                 theater.setAddress(address);
                 theater.setLat(lat);
                 theater.setLng(lng);
-                theater.setPhoto(getPhotoAsBase64(photoUrl));
+                try {
+                    theater.setPhoto(getPhotoAsBase64(photoUrl));
+                } catch (Exception e) {
+                    log.error("Failed to fetch or process photo from URL: {}. Error: {}", photoUrl, e.getMessage());
+                    theater.setPhoto(null);
+                }
                 theater.setCity(city);
                 theaterRepo.save(theater);
                 count++;
@@ -128,7 +133,7 @@ public class CsvImportHelper {
         log.info("Fetching image from URL: {}", photoUrl);
         int fixedHeight = FIXED_HEIGHT; // Fixed height for all images
         // OkHttpClient to ignore SSL (your current Unsafe client)
-        OkHttpClient client = UnsafeOkHttpClient.getUnsafeOkHttpClient();
+        OkHttpClient client = CsvImportHelper.UnsafeOkHttpClient.getUnsafeOkHttpClient();
 
         Request request = new Request.Builder()
                 .url(photoUrl)
@@ -190,5 +195,4 @@ public class CsvImportHelper {
                     .build();
         }
     }
-
 }

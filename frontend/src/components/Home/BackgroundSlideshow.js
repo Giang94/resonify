@@ -1,30 +1,22 @@
 import React, { useEffect, useState } from "react";
 import "./BackgroundSlideshow.css";
 
-const BackgroundGrid = () => {
+const BackgroundSlideshow = () => {
   const [photos, setPhotos] = useState([]);
   const [grid, setGrid] = useState([]);
-  const [dimensions, setDimensions] = useState({
-    cols: 4,
-    rows: 4
-  });
+  const [dimensions, setDimensions] = useState({ cols: 4, rows: 4 });
 
-  // Add window resize handler
+  // Responsive grid
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      let cols;
-      if (width < 640) cols = 2;      // mobile
-      else if (width < 1024) cols = 3; // tablet
-      else cols = 4;                   // desktop
-
-      const rows = Math.ceil(16 / cols); // Maintain total cells around 16
+      let cols = width < 640 ? 2 : width < 1024 ? 3 : 4;
+      let rows = Math.ceil(12 / cols);
       setDimensions({ cols, rows });
     };
-
-    handleResize(); // Initial call
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   // Fetch photos
@@ -34,62 +26,70 @@ const BackgroundGrid = () => {
       .then((data) => {
         setPhotos(data);
         const totalCells = dimensions.cols * dimensions.rows;
-        const initialGrid = Array.from(
-          { length: totalCells },
-          (_, i) => data[i % data.length]
-        );
-        setGrid(initialGrid);
+        setGrid(Array.from({ length: totalCells }, (_, i) => data[i % data.length]));
       })
       .catch((err) => console.error("Failed to load photos", err));
   }, [dimensions]);
 
   // Update grid when dimensions change
   useEffect(() => {
-    if (photos.length === 0) return;
-
+    if (!photos.length) return;
     const totalCells = dimensions.cols * dimensions.rows;
-    const newGrid = Array.from(
-      { length: totalCells },
-      (_, i) => photos[i % photos.length]
-    );
-    setGrid(newGrid);
+    setGrid(Array.from({ length: totalCells }, (_, i) => photos[i % photos.length]));
   }, [dimensions, photos]);
 
-  // Photo swap effect
+  // Pan transition effect
   useEffect(() => {
-    if (photos.length === 0) return;
+    if (!photos.length) return;
 
     const interval = setInterval(() => {
-      let howMany = Math.floor(Math.random() * 3) + 1;
+      const cellIndex = Math.floor(Math.random() * grid.length);
+      const cell = document.querySelector(`[data-index="${cellIndex}"]`);
+      if (!cell) return;
 
-      for (let i = 0; i < howMany; i++) {
-        setTimeout(() => {
-          setGrid((prev) => {
-            const newGrid = [...prev];
-            const cellIndex = Math.floor(Math.random() * newGrid.length);
-            const newPhoto = photos[Math.floor(Math.random() * photos.length)];
-            newGrid[cellIndex] = newPhoto;
-            return newGrid;
-          });
-        }, i * 300);
-      }
-    }, 10000);
+      const nextPhoto = photos[Math.floor(Math.random() * photos.length)];
+      const directions = ["up", "down", "left", "right"];
+      const dir = directions[Math.floor(Math.random() * directions.length)];
+
+      // Create incoming photo
+      const newFace = document.createElement("div");
+      newFace.className = `grid-face incoming pan-${dir}`;
+      newFace.style.backgroundImage = `url(${nextPhoto})`;
+
+      cell.appendChild(newFace);
+
+      // Trigger transition
+      requestAnimationFrame(() => {
+        newFace.classList.add("active");
+      });
+
+      // Finish transition
+      setTimeout(() => {
+        setGrid((prev) => {
+          const newGrid = [...prev];
+          newGrid[cellIndex] = nextPhoto;
+          return newGrid;
+        });
+        cell.removeChild(newFace);
+      }, 1000);
+    }, 2000);
 
     return () => clearInterval(interval);
-  }, [photos]);
+  }, [photos, grid.length]);
 
   return (
     <div
-      className="absolute inset-0 grid grid-cols-4 grid-rows-3 w-full h-full bg-grid"
+      className="bg-grid"
       style={{
         gridTemplateColumns: `repeat(${dimensions.cols}, 1fr)`,
-        gridTemplateRows: `repeat(${dimensions.rows}, 1fr)`
+        gridTemplateRows: `repeat(${dimensions.rows}, 1fr)`,
       }}
     >
       {grid.map((photo, idx) => (
         <div
           key={idx}
-          className="w-full h-full bg-cover bg-center transition-opacity duration-1000 grid-cell"
+          data-index={idx}
+          className="grid-cell"
           style={{ backgroundImage: `url(${photo})` }}
         />
       ))}
@@ -97,4 +97,4 @@ const BackgroundGrid = () => {
   );
 };
 
-export default BackgroundGrid;
+export default BackgroundSlideshow;

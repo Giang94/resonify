@@ -1,0 +1,3 @@
+databaseChangeLog:
+  - include:
+      file: db/migration/20250915-001-initialize-schema.yaml

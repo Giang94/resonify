@@ -24,9 +24,8 @@ public class Theater {
     private String address;
     private double lat;
     private double lng;
-
-    @Lob
-    @Column(columnDefinition = "CLOB")
+    
+    @Column(columnDefinition = "TEXT")
     private String photo;
 
     @ManyToOne

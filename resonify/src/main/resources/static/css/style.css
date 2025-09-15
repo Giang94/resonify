@@ -135,3 +135,37 @@ a.back-home:hover {
     .sidebar li { margin: 0 10px; }
     .content { margin: 10px; }
 }
+
+.photo-section input[type="text"] {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  height: 38px;
+  font-size: 14px;
+  box-sizing: border-box;
+  margin-bottom: 0 !important;
+}
+
+.delete-photo {
+  all: unset;
+  cursor: pointer;
+  color: #f44336;
+  margin-left: 8px;
+  line-height: 1;
+  display: flex;
+    background: none;
+    border: none;
+    font-size: 18px;
+}
+
+.delete-photo:hover {
+background: none; !important
+  font-weight: bold;     /* makes the ✕ thicker */
+  color: darkred;        /* optional: darker red on hover */
+}
+
+.delete-photo:focus {
+  outline: none;         /* removes the blue focus ring */
+  box-shadow: none;      /* extra safety */
+}

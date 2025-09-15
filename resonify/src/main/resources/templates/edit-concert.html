@@ -1,0 +1,4 @@
+<div th:fragment="content" data-page="edit-concert">
+	<h1 style="text-align:center; margin-bottom: 20px;">Edit Concert</h1>
+	<div th:replace="concert-form :: concertForm(${concert}, ${theaters}, '/web/concerts/' + ${concert.id}, 'Update Concert')"></div>
+</div>

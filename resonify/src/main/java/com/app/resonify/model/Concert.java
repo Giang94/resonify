@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,6 +24,7 @@ public class Concert {
     private UUID id;
 
     private String name;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
     private String ticket;
 
@@ -35,8 +37,8 @@ public class Concert {
     @Column(name = "artist")
     private List<String> artists;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "concert_photos", joinColumns = @JoinColumn(name = "concert_id"))
-    @Column(name = "photo", columnDefinition = "CLOB")
+    @Column(name = "photo", columnDefinition = "TEXT")
     private List<String> photos;
 }

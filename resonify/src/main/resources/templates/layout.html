@@ -1,68 +1,162 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="icon" type="image/png" th:href="@{/icon/favicon.png}"/>
-    <title th:text="${pageTitle}">Resonify</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}"/>
-    <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <!-- Select2 JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; display: flex; height: 100vh; }
-        nav.sidebar { width: 220px; background-color: #1976d2; color: white; padding: 20px; box-sizing: border-box; }
-        nav.sidebar ul { list-style: none; padding: 0; }
-        nav.sidebar li { margin-bottom: 10px; }
-        nav.sidebar a { color: white; text-decoration: none; display: block; padding: 6px 10px; border-radius: 4px; }
-        nav.sidebar a.active { background-color: #0d47a1; font-weight: bold; }
-        main.content { flex: 1; padding: 20px; overflow-y: auto; }
-        .back-home { margin-top: 20px; display: inline-block; padding: 6px 10px; background-color: #1976d2; color: white; text-decoration: none; border-radius: 4px; }
-    </style>
+	<link rel="icon" type="image/png" th:href="@{/icon/favicon.png}"/>
+	<title th:text="${pageTitle}">Resonify</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}"/>
+	<!-- Select2 CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+	<!-- Select2 JS -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+	<style>
+		body { font-family: Arial, sans-serif; margin: 0; display: flex; height: 100vh; }
+		nav.sidebar { width: 220px; background-color: #1976d2; color: white; padding: 20px; box-sizing: border-box; }
+		nav.sidebar ul { list-style: none; padding: 0; }
+		nav.sidebar li { margin-bottom: 10px; }
+		nav.sidebar a { color: white; text-decoration: none; display: block; padding: 6px 10px; border-radius: 4px; }
+		nav.sidebar a.active { background-color: #0d47a1; font-weight: bold; }
+		main.content { flex: 1; padding: 20px; overflow-y: auto; }
+		.back-home { margin-top: 20px; display: inline-block; padding: 6px 10px; background-color: #1976d2; color: white; text-decoration: none; border-radius: 4px; }
+	</style>
 </head>
 <body>
 <nav class="sidebar">
-    <h2>Menu</h2>
-    <ul>
-        <li><a th:href="@{/}" th:classappend="${activePage=='home'} ? 'active' : ''">Home</a></li>
-        <li><a th:href="@{/web/concerts/list}" th:classappend="${activePage=='concerts'} ? 'active' : ''">Concerts
-            List</a></li>
-        <li><a th:href="@{/web/concerts/add}" th:classappend="${activePage=='addConcert'} ? 'active' : ''">Add
-            Concert</a></li>
-        <li><a th:href="@{/web/theaters/list}" th:classappend="${activePage=='theaters'} ? 'active' : ''">Theaters
-            List</a></li>
-        <li><a th:href="@{/web/theaters/add}" th:classappend="${activePage=='addTheater'} ? 'active' : ''">Add
-            Theater</a></li>
-        <li><a th:href="@{/web/cities/list}" th:classappend="${activePage=='cities'} ? 'active' : ''">Cities List</a>
-        </li>
-        <li><a th:href="@{/web/cities/add}" th:classappend="${activePage=='addCity'} ? 'active' : ''">Add City</a></li>
-    </ul>
+	<h2>Menu</h2>
+	<ul>
+		<li><a th:href="@{/}" th:classappend="${activePage=='home'} ? 'active' : ''">Home</a></li>
+		<li><a th:href="@{/web/concerts/list}" th:classappend="${activePage=='concerts'} ? 'active' : ''">Concerts
+			List</a></li>
+		<li><a th:href="@{/web/concerts/add}" th:classappend="${activePage=='addConcert'} ? 'active' : ''">Add
+			Concert</a></li>
+		<li><a th:href="@{/web/theaters/list}" th:classappend="${activePage=='theaters'} ? 'active' : ''">Theaters
+			List</a></li>
+		<li><a th:href="@{/web/theaters/add}" th:classappend="${activePage=='addTheater'} ? 'active' : ''">Add
+			Theater</a></li>
+		<li><a th:href="@{/web/cities/list}" th:classappend="${activePage=='cities'} ? 'active' : ''">Cities List</a>
+		</li>
+		<li><a th:href="@{/web/cities/add}" th:classappend="${activePage=='addCity'} ? 'active' : ''">Add City</a></li>
+	</ul>
 </nav>
 
 <main class="content">
-    <div th:replace="${contentTemplate} :: content"></div>
+	<div th:replace="${contentTemplate} :: content"></div>
 </main>
+
 <script>
-    function initSearchableSelects() {
-        $('.searchable-select').each(function() {
-            if (!$(this).hasClass('select2-hidden-accessible')) { // prevent double init
-                $(this).select2({
-                    width: '100%',
-                    placeholder: "--Select--",
-                    allowClear: true
-                });
-            }
-        });
+	function initSearchableSelects() {
+		$('.searchable-select').each(function() {
+			if (!$(this).hasClass('select2-hidden-accessible')) { // prevent double init
+				$(this).select2({
+					width: '100%',
+					placeholder: "--Select--",
+					allowClear: true
+				});
+			}
+		});
 
-        $('.searchable-select').on('select2:open', function () {
-            $('.select2-container--open .select2-search__field').focus();
-        });
-    }
+		$('.searchable-select').on('select2:open', function () {
+			$('.select2-container--open .select2-search__field').focus();
+		});
+	}
 
-    // Run on page load
-    $(document).ready(function () {
-        initSearchableSelects();
-    });
+	// Run on page load
+	$(document).ready(function () {
+		initSearchableSelects();
+	});
+
+	// --- ADD CONCERT PAGE ---
+	document.addEventListener("DOMContentLoaded", () => {
+		const photoFields = document.getElementById("photo-fields");
+		const addBtn = document.getElementById("add-photo-btn");
+
+		if (!photoFields || !addBtn) return; // not on Add Concert page
+
+		// validate empty inputs -> toggle addBtn
+		function validateInputs() {
+			const inputs = photoFields.querySelectorAll('input[name="photos"]');
+			const hasEmpty = Array.from(inputs).some(input => input.value.trim() === "");
+			addBtn.disabled = hasEmpty;
+		}
+
+		// create new photo input row
+		function createPhotoRow() {
+	const div = document.createElement("div");
+	div.style.display = "flex";
+	div.style.flexDirection = "column";  // so thumbnail sits below input
+	div.style.marginBottom = "12px";
+
+	// row with input + delete button
+	const topRow = document.createElement("div");
+	topRow.style.display = "flex";
+	topRow.style.alignItems = "center";
+
+	const input = document.createElement("input");
+	input.type = "text";
+	input.name = "photos";
+	input.placeholder = "Photo URL";
+	input.style.flex = "1";
+	input.style.padding = "8px";
+	input.style.border = "1px solid #ccc";
+	input.style.borderRadius = "4px";
+
+	const removeBtn = document.createElement("button");
+	removeBtn.type = "button";
+	removeBtn.textContent = "✖";
+	removeBtn.className = "delete-photo";
+	removeBtn.addEventListener("click", () => {
+		const rows = photoFields.querySelectorAll("div");
+		if (rows.length > 1) {
+			div.remove();
+			validateInputs();
+		}
+	});
+
+	topRow.appendChild(input);
+	topRow.appendChild(removeBtn);
+
+	// thumbnail preview
+	const preview = document.createElement("img");
+	preview.style.maxWidth = "120px";
+	preview.style.maxHeight = "80px";
+	preview.style.marginTop = "6px";
+	preview.style.borderRadius = "4px";
+	preview.style.objectFit = "cover";
+	preview.style.display = "none"; // hidden by default
+
+	// whenever user types → update preview
+	input.addEventListener("input", () => {
+		validateInputs();
+		if (input.value.trim()) {
+			preview.src = input.value.trim();
+			preview.style.display = "block";
+		} else {
+			preview.src = "";
+			preview.style.display = "none";
+		}
+	});
+
+	div.appendChild(topRow);
+	div.appendChild(preview);
+
+	return div;
+}
+
+		// attach addBtn behavior
+		addBtn.addEventListener("click", () => {
+			if (!addBtn.disabled) {
+				const newRow = createPhotoRow();
+				photoFields.appendChild(newRow);
+				newRow.querySelector("input").focus();
+				validateInputs();
+			}
+		});
+
+		// always create the first row dynamically
+		photoFields.appendChild(createPhotoRow());
+		validateInputs();
+	});
+	// --- END ADD CONCERT PAGE ---
 </script>
 </body>
 </html>

@@ -1,0 +1,242 @@
+databaseChangeLog:
+  # Continent table
+  - changeSet:
+      id: c85d480f-740a-46b5-bbaf-a959ca11a2ba
+      author: nhgiang
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: continent
+      changes:
+        - createTable:
+            tableName: continent
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+  # Country table
+  - changeSet:
+      id: 71bb4009-cf07-49f8-aca7-2ef08cab49c9
+      author: nhgiang
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: country
+      changes:
+        - createTable:
+            tableName: country
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: continent_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: country
+            baseColumnNames: continent_id
+            referencedTableName: continent
+            referencedColumnNames: id
+            constraintName: fk_country_continent
+
+  # City table
+  - changeSet:
+      id: 44addea7-163d-496f-90f8-c4ba766a061b
+      author: nhgiang
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: city
+      changes:
+        - createTable:
+            tableName: city
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: country_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: city
+            baseColumnNames: country_id
+            referencedTableName: country
+            referencedColumnNames: id
+            constraintName: fk_city_country
+        - addUniqueConstraint:
+            tableName: city
+            columnNames: name,country_id
+            constraintName: uq_city_name_country
+
+  # Theaters table
+  - changeSet:
+      id: 1d68db38-901f-40ba-99bc-782075e8251e
+      author: nhgiang
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: theaters
+      changes:
+        - createTable:
+            tableName: theaters
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address
+                  type: VARCHAR(255)
+              - column:
+                  name: lat
+                  type: DOUBLE PRECISION
+              - column:
+                  name: lng
+                  type: DOUBLE PRECISION
+              - column:
+                  name: photo
+                  type: TEXT
+              - column:
+                  name: city_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: theaters
+            baseColumnNames: city_id
+            referencedTableName: city
+            referencedColumnNames: id
+            constraintName: fk_theater_city
+
+  # Concerts table
+  - changeSet:
+      id: 9e2d004f-0af7-438e-8898-c5e916adb8a0
+      author: nhgiang
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: concerts
+      changes:
+        - createTable:
+            tableName: concerts
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date
+                  type: DATE
+              - column:
+                  name: ticket
+                  type: VARCHAR(255)
+              - column:
+                  name: theater_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: concerts
+            baseColumnNames: theater_id
+            referencedTableName: theaters
+            referencedColumnNames: id
+            constraintName: fk_concert_theater
+
+  # Concert artists
+  - changeSet:
+      id: 302a69b1-7c42-41ef-aeb6-3abe8083fff0
+      author: nhgiang
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: concert_artists
+      changes:
+        - createTable:
+            tableName: concert_artists
+            columns:
+              - column:
+                  name: concert_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: artist
+                  type: VARCHAR(255)
+        - addForeignKeyConstraint:
+            baseTableName: concert_artists
+            baseColumnNames: concert_id
+            referencedTableName: concerts
+            referencedColumnNames: id
+            constraintName: fk_concert_artists_concert
+
+  # Concert photos
+  - changeSet:
+      id: e9431524-b392-4e9f-a4ca-62260ee865b4
+      author: nhgiang
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: concert_photos
+      changes:
+        - createTable:
+            tableName: concert_photos
+            columns:
+              - column:
+                  name: concert_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: photo
+                  type: TEXT
+        - addForeignKeyConstraint:
+            baseTableName: concert_photos
+            baseColumnNames: concert_id
+            referencedTableName: concerts
+            referencedColumnNames: id
+            constraintName: fk_concert_photos_concert

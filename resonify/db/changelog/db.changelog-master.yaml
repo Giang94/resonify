@@ -1,0 +1,231 @@
+databaseChangeLog:
+- changeSet:
+    id: 1757918580097-1
+    author: nhgiang (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: id
+            type: UUID
+        - column:
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: country_id
+            type: UUID
+        tableName: city
+- changeSet:
+    id: 1757918580097-2
+    author: nhgiang (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: concert_id
+            type: UUID
+        - column:
+            name: artist
+            type: VARCHAR(255)
+        tableName: concert_artists
+- changeSet:
+    id: 1757918580097-3
+    author: nhgiang (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: concert_id
+            type: UUID
+        - column:
+            name: photo
+            type: TEXT
+        tableName: concert_photos
+- changeSet:
+    id: 1757918580097-4
+    author: nhgiang (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: id
+            type: UUID
+        - column:
+            name: date
+            type: date
+        - column:
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: ticket
+            type: VARCHAR(255)
+        - column:
+            name: theater_id
+            type: UUID
+        tableName: concerts
+- changeSet:
+    id: 1757918580097-5
+    author: nhgiang (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: id
+            type: UUID
+        - column:
+            name: name
+            type: VARCHAR(255)
+        tableName: continent
+- changeSet:
+    id: 1757918580097-6
+    author: nhgiang (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: id
+            type: UUID
+        - column:
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: continent_id
+            type: UUID
+        tableName: country
+- changeSet:
+    id: 1757918580097-7
+    author: nhgiang (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: id
+            type: UUID
+        - column:
+            name: address
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: lat
+            type: FLOAT8
+        - column:
+            constraints:
+              nullable: false
+            name: lng
+            type: FLOAT8
+        - column:
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: photo
+            type: TEXT
+        - column:
+            name: city_id
+            type: UUID
+        tableName: theaters
+- changeSet:
+    id: 1757918580097-8
+    author: nhgiang (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: continent_id
+        baseTableName: country
+        constraintName: fk7t0s2v0ycq2f30hhnhorqt9oq
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: continent
+        validate: true
+- changeSet:
+    id: 1757918580097-9
+    author: nhgiang (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: city_id
+        baseTableName: theaters
+        constraintName: fkfy7ntxyjcwsa5ruqu3o0w40k
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: city
+        validate: true
+- changeSet:
+    id: 1757918580097-10
+    author: nhgiang (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: concert_id
+        baseTableName: concert_artists
+        constraintName: fkhkolejakv3c5m6qe8qkrfbor1
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: concerts
+        validate: true
+- changeSet:
+    id: 1757918580097-11
+    author: nhgiang (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: concert_id
+        baseTableName: concert_photos
+        constraintName: fkmkdxyyebo3tt1hmgbj3w3f4nr
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: concerts
+        validate: true
+- changeSet:
+    id: 1757918580097-12
+    author: nhgiang (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: theater_id
+        baseTableName: concerts
+        constraintName: fkngqeqld75ywna1ic2ybsgqeew
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: theaters
+        validate: true
+- changeSet:
+    id: 1757918580097-13
+    author: nhgiang (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: country_id
+        baseTableName: city
+        constraintName: fkr90euelhy6y0k38ct1phn5om0
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: country
+        validate: true
+
