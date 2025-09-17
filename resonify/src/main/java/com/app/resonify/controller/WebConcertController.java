@@ -32,7 +32,12 @@ public class WebConcertController {
     // List concerts
     @GetMapping("/list")
     public String listConcerts(Model model) {
-        model.addAttribute("concerts", concertRepo.findAll());
+        List<Concert> concerts = concertRepo.findAll()
+                        .stream().map(c -> {
+                            c.setPhotos(null);
+                            return c;
+                        }).toList();
+        model.addAttribute("concerts", concerts);
         model.addAttribute("types", ConcertType.values());
         model.addAttribute("pageTitle", "Concerts List");
         model.addAttribute("contentTemplate", "list-concerts");
@@ -54,21 +59,12 @@ public class WebConcertController {
 
     // Submit concert
     @PostMapping
-    public String saveConcert(@ModelAttribute ConcertForm form) {
+    public String saveConcert(@ModelAttribute ConcertForm form) throws IOException {
         Concert concert = new Concert();
         form.updateEntity(concert, theaterRepo);
-//        for (String url : form.getPhotoUrls()) {
-//            if (url != null && !url.isBlank()) {
-//                String encodedPhoto = PhotoHelper.getPhotoAsBase64(url);
-//
-//                ConcertPhoto photo = new ConcertPhoto();
-//                photo.setPhoto(encodedPhoto);
-//                concert.addPhoto(photo);
-//            }
-//        }
 
         concertRepo.save(concert);
-        return "redirect:/web/concerts/list";
+        return "redirect:/web/concerts/add";
     }
 
     @DeleteMapping("/{id}")
@@ -90,7 +86,7 @@ public class WebConcertController {
     }
 
     @PostMapping("/{id}")
-    public String updateConcert(@PathVariable UUID id, @ModelAttribute("concert") ConcertForm form) {
+    public String updateConcert(@PathVariable UUID id, @ModelAttribute("concert") ConcertForm form) throws IOException {
         Concert concert = concertRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid concert Id:" + id));
 

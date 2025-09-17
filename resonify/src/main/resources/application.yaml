@@ -16,9 +16,10 @@ spring:
       filter:
         enabled: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/resonify
-    username: postgres
-    password: changit
+#    url: jdbc:postgresql://localhost:5432/resonify
+    url: jdbc:postgresql://ep-proud-fog-a1dllgmy-pooler.ap-southeast-1.aws.neon.tech/resonify?user=neondb_owner&password=npg_NXqB4lGAKmo1&sslmode=require&channelBinding=require
+#    username: postgres
+#    password: changit
     driver-class-name: org.postgresql.Driver
 
 app:

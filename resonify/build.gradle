@@ -35,6 +35,11 @@ dependencies {
 
     // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    implementation 'org.apache.commons:commons-imaging:1.0-alpha3'
+
+    implementation 'com.twelvemonkeys.imageio:imageio:3.12.0'
+    implementation 'org.sejda.imageio:webp-imageio:0.1.6'
 }
 
 tasks.named('test') {

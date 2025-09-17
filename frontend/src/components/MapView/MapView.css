@@ -31,6 +31,18 @@
   transition: left 0.3s ease;
   z-index: 1500;
   padding: 20px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+.concert-panel::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+.concert-panel::after {
+  content: "";
+  display: block;
+  height: 20px; /* space at the bottom */
 }
 
 .concert-panel.open {
@@ -54,20 +66,39 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative;
+  color: #fff;
+  cursor: pointer;
+  overflow: hidden;
 }
 
 .concert-item h3 {
   font-size: 18px; /* Slightly larger title */
-  margin: 0 0 8px 0;
+  margin: 0 0 0 0;
 }
 
 .concert-item div {
-  margin: 4px 0;
+  margin: 0;
 }
 
 .concert-item small {
   color: #aaa;
   margin-top: auto; /* Push artist name to bottom */
+}
+
+.concert-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.8) 50%, transparent 100%);
+  z-index: 0;
+}
+
+.concert-item h3,
+.concert-item div,
+.concert-item small {
+  position: relative;
+  z-index: 1;
 }
 
 /* Map container shifts when panel is open */

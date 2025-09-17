@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @Controller
@@ -45,7 +46,7 @@ public class WebTheaterController {
     }
 
     @PostMapping
-    public String saveTheater(@ModelAttribute Theater theater) {
+    public String saveTheater(@ModelAttribute Theater theater) throws IOException {
         String photoUrl = theater.getPhoto();
         if (photoUrl != null && !photoUrl.isBlank()) {
             theater.setPhoto(PhotoHelper.getPhotoAsBase64(photoUrl));
@@ -65,7 +66,7 @@ public class WebTheaterController {
     }
 
     @PutMapping("/{id}")
-    public String updateTheater(@PathVariable UUID id, @ModelAttribute TheaterForm form) {
+    public String updateTheater(@PathVariable UUID id, @ModelAttribute TheaterForm form) throws IOException {
         Theater existed = theaterRepo.findById(id).orElseThrow();
         existed.setName(form.getName());
         existed.setAddress(form.getAddress());

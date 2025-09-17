@@ -8,6 +8,7 @@ import com.app.resonify.utils.PhotoHelper;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
@@ -164,7 +165,7 @@ public class ConcertForm {
      * - If a submitted photo has no id (blank/empty), create a new ConcertPhoto.
      * - Any existing ConcertPhoto not referenced by submitted photoIds will be removed.
      */
-    public void updateEntity(Concert concert, TheaterRepository theaterRepository) {
+    public void updateEntity(Concert concert, TheaterRepository theaterRepository) throws IOException {
         concert.setName(this.name);
         concert.setDate(this.date);
         concert.setTicket(this.ticket);

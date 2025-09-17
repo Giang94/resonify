@@ -1,6 +1,7 @@
 package com.app.resonify.model;
 
 import com.app.resonify.model.enums.ConcertType;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,10 +37,12 @@ public class Concert {
     @ElementCollection
     @CollectionTable(name = "concert_artists", joinColumns = @JoinColumn(name = "concert_id"))
     @Column(name = "artist")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<String> artists = new ArrayList<>();
 
     @OneToMany(mappedBy = "concert", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<ConcertPhoto> photos = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)

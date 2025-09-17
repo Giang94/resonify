@@ -13,7 +13,18 @@ const ConcertModal = ({ concert, onClose }) => {
   const next = () => setActive((a) => (a + 1) % photos.length);
 
   return (
-    <div className="concert-modal-overlay" onClick={onClose} role="dialog" aria-modal="true">
+    <div
+      className="concert-modal-overlay"
+      onClick={(e) => {
+        // Only dismiss modal if clicking the overlay itself
+        if (e.target === e.currentTarget) {
+          e.stopPropagation(); // Stop click from reaching map container
+          onClose();
+        }
+      }}
+      role="dialog"
+      aria-modal="true"
+    >
       <div className="concert-modal" onClick={(e) => e.stopPropagation()}>
         <button className="concert-modal-close" onClick={onClose} aria-label="Close">✕</button>
 
@@ -21,10 +32,10 @@ const ConcertModal = ({ concert, onClose }) => {
           <h2 className="concert-title">{concert.type}: {concert.name}</h2>
           <div className="concert-meta">{concert.date} {concert.venue ? `• ${concert.venue}` : ""}</div>
 
-        <aside className="concert-details">
-          <p><strong>Theater:</strong> {concert.theater?.name || "—"}</p>
-          <p><strong>Artist:</strong> {concert.artists?.join(", ") || "N/A"}</p>
-        </aside>
+          <aside className="concert-details">
+            <p><strong>Theater:</strong> {concert.theater?.name || "—"}</p>
+            <p><strong>Artist:</strong> {concert.artists?.join(", ") || "N/A"}</p>
+          </aside>
         </header>
 
         <div className="concert-modal-body">

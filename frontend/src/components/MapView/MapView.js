@@ -19,7 +19,12 @@ export default function MapView() {
   useEffect(() => {
     fetch(`${BASE_URL}/api/concerts`)
       .then((res) => res.json())
-      .then((data) => setConcerts(data))
+      .then((data) => {
+        const sorted = data.sort(
+          (b, a) => new Date(a.date) - new Date(b.date) // ascending
+        );
+        setConcerts(sorted);
+      })
       .catch(console.error);
   }, []);
 
@@ -57,7 +62,7 @@ export default function MapView() {
               key={concert.id}
               style={{
                 background: concert.photos?.[0]?.photo
-                  ? `linear-gradient(rgba(42, 42, 61, 0.2), rgba(42, 42, 61, 0.2)), url(${concert.photos[0].photo})`
+                  ? `linear-gradient(rgba(42, 42, 61, 0.3), rgba(42, 42, 61, 0.3)), url(${concert.photos[[Math.floor(Math.random() * concert.photos.length)]].photo})`
                   : '#2a2a3d',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center'
