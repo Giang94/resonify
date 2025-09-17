@@ -13,9 +13,9 @@ export default function MapView() {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [theaterConcerts, setTheaterConcerts] = useState([]);
-
+  const BASE_URL = process.env.REACT_APP_API_BASE_URL;
   useEffect(() => {
-    fetch("http://localhost:8080/api/concerts")
+    fetch(`${BASE_URL}/api/concerts`)
       .then((res) => res.json())
       .then((data) => setConcerts(data))
       .catch(console.error);

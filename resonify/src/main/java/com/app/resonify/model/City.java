@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.UUID;
 
@@ -22,5 +23,6 @@ public class City {
     private String name;
     @ManyToOne
     @JoinColumn(name = "country_id")
+    @ToString.Exclude
     private Country country;
 }

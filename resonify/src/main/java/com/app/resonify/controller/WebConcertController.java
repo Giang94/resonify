@@ -1,21 +1,26 @@
 package com.app.resonify.controller;
 
 import com.app.resonify.model.Concert;
+import com.app.resonify.model.ConcertPhoto;
+import com.app.resonify.model.enums.ConcertType;
 import com.app.resonify.model.form.ConcertForm;
 import com.app.resonify.repository.ConcertRepository;
 import com.app.resonify.repository.TheaterRepository;
+import com.app.resonify.utils.PhotoHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
 @RequestMapping("/web/concerts")
 public class WebConcertController {
 
+    private final String LAYOUT = "layout";
     private final ConcertRepository concertRepo;
     private final TheaterRepository theaterRepo;
 
@@ -28,26 +33,40 @@ public class WebConcertController {
     @GetMapping("/list")
     public String listConcerts(Model model) {
         model.addAttribute("concerts", concertRepo.findAll());
+        model.addAttribute("types", ConcertType.values());
         model.addAttribute("pageTitle", "Concerts List");
         model.addAttribute("contentTemplate", "list-concerts");
         model.addAttribute("activePage", "concerts");
-        return "layout";
+        return LAYOUT;
     }
 
     // Add concert form
     @GetMapping("/add")
     public String addConcertForm(Model model) {
-        model.addAttribute("concert", new Concert());
+        model.addAttribute("concert", new ConcertForm());
         model.addAttribute("theaters", theaterRepo.findAll());
+        model.addAttribute("types", ConcertType.values());
         model.addAttribute("pageTitle", "Add Concert");
         model.addAttribute("contentTemplate", "add-concert");
         model.addAttribute("activePage", "addConcert");
-        return "layout";
+        return LAYOUT;
     }
 
     // Submit concert
     @PostMapping
-    public String saveConcert(@ModelAttribute Concert concert) {
+    public String saveConcert(@ModelAttribute ConcertForm form) {
+        Concert concert = new Concert();
+        form.updateEntity(concert, theaterRepo);
+//        for (String url : form.getPhotoUrls()) {
+//            if (url != null && !url.isBlank()) {
+//                String encodedPhoto = PhotoHelper.getPhotoAsBase64(url);
+//
+//                ConcertPhoto photo = new ConcertPhoto();
+//                photo.setPhoto(encodedPhoto);
+//                concert.addPhoto(photo);
+//            }
+//        }
+
         concertRepo.save(concert);
         return "redirect:/web/concerts/list";
     }
@@ -61,34 +80,21 @@ public class WebConcertController {
     @GetMapping("/edit/{id}")
     public String editConcertForm(@PathVariable UUID id, Model model) {
         Concert concert = concertRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid concert Id:" + id));
-        model.addAttribute("concert", concert);
+        model.addAttribute("concert", ConcertForm.fromEntity(concert));
         model.addAttribute("theaters", theaterRepo.findAll());
+        model.addAttribute("types", ConcertType.values());
         model.addAttribute("pageTitle", "Edit Concert");
         model.addAttribute("contentTemplate", "edit-concert");
         model.addAttribute("activePage", "editConcert");
-        return "layout";
+        return LAYOUT;
     }
 
     @PostMapping("/{id}")
-    public String updateConcert(@PathVariable UUID id, @ModelAttribute ConcertForm form) {
+    public String updateConcert(@PathVariable UUID id, @ModelAttribute("concert") ConcertForm form) {
         Concert concert = concertRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid concert Id:" + id));
 
-        concert.setName(form.getName());
-        concert.setDate(form.getDate());
-        concert.setTicket(form.getTicket());
-
-        if (form.getArtists() != null && !form.getArtists().isBlank()) {
-            concert.setArtists(Arrays.stream(form.getArtists().split(","))
-                    .map(String::trim)
-                    .filter(s -> !s.isEmpty())
-                    .toList());
-        } else {
-            concert.setArtists(new ArrayList<>());
-        }
-
-        // process photos
-        concert.setPhotos(form.getPhotos());
+        form.updateEntity(concert, theaterRepo);
         concertRepo.save(concert);
 
         return "redirect:/web/concerts/list";

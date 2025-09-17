@@ -2,8 +2,10 @@ package com.app.resonify.controller;
 
 
 import com.app.resonify.model.Theater;
+import com.app.resonify.model.form.TheaterForm;
 import com.app.resonify.repository.CityRepository;
 import com.app.resonify.repository.TheaterRepository;
+import com.app.resonify.utils.PhotoHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +46,10 @@ public class WebTheaterController {
 
     @PostMapping
     public String saveTheater(@ModelAttribute Theater theater) {
+        String photoUrl = theater.getPhoto();
+        if (photoUrl != null && !photoUrl.isBlank()) {
+            theater.setPhoto(PhotoHelper.getPhotoAsBase64(photoUrl));
+        }
         theaterRepo.save(theater);
         return "redirect:/web/theaters/list";
     }
@@ -58,16 +64,30 @@ public class WebTheaterController {
         return "layout";
     }
 
-    @PostMapping("/{id}")
-    public String updateTheater(@PathVariable UUID id, @ModelAttribute Theater theater) {
+    @PutMapping("/{id}")
+    public String updateTheater(@PathVariable UUID id, @ModelAttribute TheaterForm form) {
         Theater existed = theaterRepo.findById(id).orElseThrow();
-        existed.setName(theater.getName());
-        existed.setAddress(theater.getAddress());
-        existed.setLat(theater.getLat());
-        existed.setLng(theater.getLng());
-        if (theater.getCity() != null) {
-            existed.setCity(theater.getCity());
+        existed.setName(form.getName());
+        existed.setAddress(form.getAddress());
+        existed.setLat(form.getLat());
+        existed.setLng(form.getLng());
+        existed.setCity(cityRepo.findById(form.getCityId()).orElseThrow());
+
+        switch (form.getPhotoAction()) {
+            case "DELETE":
+                existed.setPhoto(null);
+                break;
+            case "CHANGE", "NEW":
+                if (form.getPhotoUrl() != null && !form.getPhotoUrl().isBlank()) {
+                    existed.setPhoto(PhotoHelper.getPhotoAsBase64(form.getPhotoUrl()));
+                }
+                break;
+            case "KEEP":
+            default:
+                // do nothing
+                break;
         }
+
         theaterRepo.save(existed);
         return "redirect:/web/theaters/list";
     }

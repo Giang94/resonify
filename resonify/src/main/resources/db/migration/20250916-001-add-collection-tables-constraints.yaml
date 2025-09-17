@@ -1,0 +1,29 @@
+databaseChangeLog:
+    - changeSet:
+          id: 19f08c2d-04da-4da0-bd40-5c2af1379010
+          author: nhgiang
+          preConditions:
+              - onFail: MARK_RAN
+              - onError: HALT
+              - not:
+                    foreignKeyConstraintExists:
+                        foreignKeyName: fk_concert_artist_cascade
+              - not:
+                    foreignKeyConstraintExists:
+                        foreignKeyName: fk_concert_photo_cascade
+          changes:
+              - addForeignKeyConstraint:
+                    baseTableName: concert_artists
+                    baseColumnNames: concert_id
+                    constraintName: fk_concert_artist_cascade
+                    referencedTableName: concerts
+                    referencedColumnNames: id
+                    onDelete: CASCADE
+
+              - addForeignKeyConstraint:
+                    baseTableName: concert_photos
+                    baseColumnNames: concert_id
+                    constraintName: fk_concert_photo_cascade
+                    referencedTableName: concerts
+                    referencedColumnNames: id
+                    onDelete: CASCADE

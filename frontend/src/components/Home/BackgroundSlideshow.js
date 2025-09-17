@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./BackgroundSlideshow.css";
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const BackgroundSlideshow = () => {
   const [photos, setPhotos] = useState([]);
   const [grid, setGrid] = useState([]);
   const [dimensions, setDimensions] = useState({ cols: 4, rows: 4 });
+
 
   // Responsive grid
   useEffect(() => {
@@ -21,7 +23,7 @@ const BackgroundSlideshow = () => {
 
   // Fetch photos
   useEffect(() => {
-    fetch("http://localhost:8080/api/photos")
+    fetch(`${BASE_URL}/api/photos`)
       .then((res) => res.json())
       .then((data) => {
         setPhotos(data);

@@ -1,13 +1,13 @@
 package com.app.resonify.model;
 
+import com.app.resonify.model.enums.ConcertType;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,15 +30,19 @@ public class Concert {
 
     @ManyToOne
     @JoinColumn(name = "theater_id")
+    @ToString.Exclude
     private Theater theater;
 
     @ElementCollection
     @CollectionTable(name = "concert_artists", joinColumns = @JoinColumn(name = "concert_id"))
     @Column(name = "artist")
-    private List<String> artists;
+    private List<String> artists = new ArrayList<>();
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "concert_photos", joinColumns = @JoinColumn(name = "concert_id"))
-    @Column(name = "photo", columnDefinition = "TEXT")
-    private List<String> photos;
+    @OneToMany(mappedBy = "concert", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<ConcertPhoto> photos = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private ConcertType type;
 }

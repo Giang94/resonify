@@ -1,10 +1,7 @@
 package com.app.resonify.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -30,5 +27,6 @@ public class Theater {
 
     @ManyToOne
     @JoinColumn(name = "city_id")
+    @ToString.Exclude
     private City city;
 }

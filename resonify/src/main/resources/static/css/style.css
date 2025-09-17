@@ -158,14 +158,3 @@ a.back-home:hover {
     border: none;
     font-size: 18px;
 }
-
-.delete-photo:hover {
-background: none; !important
-  font-weight: bold;     /* makes the ✕ thicker */
-  color: darkred;        /* optional: darker red on hover */
-}
-
-.delete-photo:focus {
-  outline: none;         /* removes the blue focus ring */
-  box-shadow: none;      /* extra safety */
-}

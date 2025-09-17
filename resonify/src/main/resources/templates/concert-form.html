@@ -4,11 +4,21 @@
 			
 			<div style="margin-bottom: 15px;">
 				<label for="theater">Theater:</label>
-				<select id="theater" th:field="*{theater}" required class="searchable-select"
+				<select id="theater" th:field="*{theaterId}" required class="searchable-select"
 				        style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;">
 					<option value="">--Select Theater--</option>
 					<option th:each="t : ${theaters}" th:value="${t.id}"
 					        th:text="${t.name + ' (' + t.city.name + ', ' + t.city.country.name + ')'}"></option>
+				</select>
+			</div>
+			
+			<div style="margin-bottom: 15px;">
+				<label for="type">Concert Type:</label>
+				<select id="type" th:field="*{type}">
+					<option th:each="type : ${types}"
+					        th:value="${type}"
+					        th:text="${type}">
+					</option>
 				</select>
 			</div>
 			
@@ -23,7 +33,7 @@
 				<input type="date" id="date"
 				       th:field="*{date}"
 				       required
-				       style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;" />
+				       style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;"/>
 			</div>
 			
 			<div style="margin-bottom: 15px;">
@@ -33,9 +43,14 @@
 			</div>
 			
 			<div style="margin-bottom: 15px;">
-				<label for="artists">Artists (comma separated):</label>
-				<input type="text" id="artists" th:field="*{artists}"
-				       style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;"/>
+				<label for="artists">Artists:</label>
+				<div class="tag-input-container"
+				     style="display:flex; flex-wrap:wrap; gap:5px; border:1px solid #ccc; padding:5px; border-radius:4px;">
+					<input type="text" id="artist-input" placeholder="Type artist and press ,"
+					       style="border:none; outline:none; flex:1; min-width:150px;"/>
+				</div>
+				<input type="hidden" id="artists-hidden" name="artists"
+				       th:value="${#strings.listJoin(concert.artists, ',')}"/>
 			</div>
 			
 			<!-- Dynamic photo inputs -->
@@ -43,21 +58,34 @@
 				<label>Photos:</label>
 				<div id="photo-fields">
 					<!-- Existing photos -->
-					<div th:each="photo, iterStat : ${concert.photos}"
-					     style="display:flex; flex-direction:column; margin-bottom:10px;">
-						<div style="display:flex; align-items:center;">
-							<!-- Bind directly to the list element -->
-							<input type="text" th:field="*{photos[__${iterStat.index}__]}" style="flex:1;"/>
-							<button type="button" class="delete-photo" style="margin-left:8px; cursor:pointer;">✖
-							</button>
+					<div th:each="photo, iterStat : ${concert.photos}" class="photo-item existing-photo" style="position: relative; display: inline-block; margin: 5px;">
+						<input type="hidden" th:field="*{photoIds[__${iterStat.index}__]}" th:value="${photo.id}"
+						       class="photo-id"/>
+						<input type="hidden" th:field="*{photoBase64[__${iterStat.index}__]}" th:value="${photo.photo}"
+						       class="photo-base64"/>
+						<div style="display:flex; align-items:center; gap:8px;">
+							<img th:src="${photo.photo}" style="max-width:120px; max-height: 80px; display:block; border-radius:4px;"/>
+							<button type="button" class="delete-photo"
+							        style="
+						                position: absolute;
+						                bottom: 4px;
+						                right: 4px;
+						                background: white;
+						                color: red;
+						                border: none;
+						                border-radius: 50%;
+						                width: 24px;
+						                height: 24px;
+						                cursor: pointer;
+						                font-size: 14px;
+						                display: flex;
+						                align-items: center;
+						                justify-content: center;
+						            ">✖</button>
 						</div>
-						<img th:src="${photo}" style="max-width:100px; margin-top:5px;"/>
 					</div>
 				</div>
-				<button id="add-photo-btn" type="button"
-				        style="margin-top:10px; padding:6px 12px; background-color:#1976d2; color:white; border:none; border-radius:4px; cursor:pointer;">
-					+ Add Photo
-				</button>
+				<button style="margin-top: 20px" type="button" id="add-photo-btn">+ Add Photo</button>
 			</div>
 			
 			<button type="submit"

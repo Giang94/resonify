@@ -6,7 +6,7 @@ import { createCheckinIcon } from "../utils/leafletIcon";
 import MapResetButton from "./MapResetButton.js";
 import "./MapView.css";
 import ConcertModal from "./ConcertModal.js";
-
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 export default function MapView() {
   const [concerts, setConcerts] = useState([]);
   const [zoomLevel, setZoomLevel] = useState("country");
@@ -17,7 +17,7 @@ export default function MapView() {
   const [selectedConcert, setSelectedConcert] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/concerts")
+    fetch(`${BASE_URL}/api/concerts`)
       .then((res) => res.json())
       .then((data) => setConcerts(data))
       .catch(console.error);
@@ -56,15 +56,15 @@ export default function MapView() {
               className="concert-item"
               key={concert.id}
               style={{
-                background: concert.photos?.[0]
-                  ? `linear-gradient(rgba(42, 42, 61, 0.2), rgba(42, 42, 61, 0.2)), url(${concert.photos[0]})`
+                background: concert.photos?.[0]?.photo
+                  ? `linear-gradient(rgba(42, 42, 61, 0.2), rgba(42, 42, 61, 0.2)), url(${concert.photos[0].photo})`
                   : '#2a2a3d',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center'
               }}
               onClick={() => setSelectedConcert(concert)}
             >
-              <h3>{concert.name}</h3>
+              <h3>{concert.type}: {concert.name}</h3>
               <div>{concert.date}</div>
               <small>{concert.artist}</small>
             </div>
@@ -177,13 +177,13 @@ export default function MapView() {
               />
             );
           })}
-          {selectedConcert && (
-            <ConcertModal
-              concert={selectedConcert}
-              onClose={() => setSelectedConcert(null)}
-            />
-          )}
         </MapContainer>
+        {selectedConcert && (
+          <ConcertModal
+            concert={selectedConcert}
+            onClose={() => setSelectedConcert(null)}
+          />
+        )}
       </div>
     </div>
   );

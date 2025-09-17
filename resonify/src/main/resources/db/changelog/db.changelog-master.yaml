@@ -1,3 +1,7 @@
 databaseChangeLog:
   - include:
       file: db/migration/20250915-001-initialize-schema.yaml
+  - include:
+      file: db/migration/20250916-001-add-collection-tables-constraints.yaml
+  - include:
+      file: db/migration/20250916-002-add-concert-type-to-concert-table.yaml

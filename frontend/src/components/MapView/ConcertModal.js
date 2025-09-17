@@ -18,15 +18,20 @@ const ConcertModal = ({ concert, onClose }) => {
         <button className="concert-modal-close" onClick={onClose} aria-label="Close">✕</button>
 
         <header className="concert-modal-header">
-          <h2 className="concert-title">{concert.name}</h2>
+          <h2 className="concert-title">{concert.type}: {concert.name}</h2>
           <div className="concert-meta">{concert.date} {concert.venue ? `• ${concert.venue}` : ""}</div>
+
+        <aside className="concert-details">
+          <p><strong>Theater:</strong> {concert.theater?.name || "—"}</p>
+          <p><strong>Artist:</strong> {concert.artists?.join(", ") || "N/A"}</p>
+        </aside>
         </header>
 
         <div className="concert-modal-body">
           <div className="concert-gallery">
             <div className="concert-main">
               {photos.length ? (
-                <img src={photos[active]} alt={`${concert.name} ${active + 1}`} loading="lazy" />
+                <img src={photos[active].photo} alt={`${concert.type}: ${concert.name} ${active + 1}`} loading="lazy" />
               ) : (
                 <div className="no-photo">No photos</div>
               )}
@@ -43,7 +48,7 @@ const ConcertModal = ({ concert, onClose }) => {
                       onClick={() => setActive(i)}
                       aria-label={`Show photo ${i + 1}`}
                     >
-                      <img src={p} alt={`thumb ${i + 1}`} loading="lazy" />
+                      <img src={p.photo} alt={`thumb ${i + 1}`} loading="lazy" />
                     </button>
                   ))}
                 </div>
@@ -51,12 +56,6 @@ const ConcertModal = ({ concert, onClose }) => {
               </div>
             )}
           </div>
-
-          <aside className="concert-details">
-            <p><strong>Artist:</strong> {concert.artist || "—"}</p>
-            <p><strong>Theater:</strong> {concert.theater?.name || "—"}</p>
-            {concert.description && <p className="concert-description">{concert.description}</p>}
-          </aside>
         </div>
       </div>
     </div>

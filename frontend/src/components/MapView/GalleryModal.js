@@ -41,7 +41,7 @@ export default function GalleryModal({ isOpen, onClose, concerts }) {
           display: "flex", overflowX: "auto", gap: "10px", margin: "15px 0"
         }}>
           {current.photos?.map((p, i) => (
-            <img key={i} src={p} alt={current.name}
+            <img key={i} src={p.photo} alt={current.name}
               style={{ maxHeight: "200px", borderRadius: 6 }} />
           ))}
         </div>

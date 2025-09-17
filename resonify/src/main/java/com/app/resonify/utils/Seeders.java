@@ -20,43 +20,43 @@ import java.util.Optional;
 @Log4j2
 public class Seeders {
 
-    private void seedConcerts(ConcertRepository concertRepo, TheaterRepository theaterRepo) throws Exception {
-        concertRepo.deleteAll();
-        if (concertRepo.findByNameContainingIgnoreCase("Barbiere").isEmpty()) {
-            Theater theater = theaterRepo.findByNameContainingIgnoreCase("Scala").getFirst();
-            Concert concert = Concert.builder()
-                    .name("Il Barbiere di Siviglia")
-                    .date(LocalDate.parse("2023-09-06"))
-                    .theater(theater)
-                    .photos(List.of(getPhotoAsBase64("https://www.teatroallascala.org/static/upload/bar/barbiere-704189badg--ph-brescia-e-amisano---teatro-alla-scala.preset-1920x1080wp.jpg")))
-                    .build();
-            concertRepo.save(concert);
-        }
-
-        if (concertRepo.findByNameContainingIgnoreCase("Traviata").isEmpty()) {
-            Theater theater = theaterRepo.findByNameContainingIgnoreCase("Verona").getFirst();
-            Concert concert = Concert.builder()
-                    .name("La Traviata")
-                    .date(LocalDate.parse("2023-09-06"))
-                    .theater(theater)
-                    .artists(List.of("Anna Netrebko", "Freddie de Tommaso"))
-                    .photos(List.of(getPhotoAsBase64("https://www.opera-online.com/media/images/picture/production_locale/0001/5637/12686/xl_la-traviata_arena-di-verona_090923_ennevifoto_0277.jpg")))
-                    .build();
-            concertRepo.save(concert);
-        }
-
-        if (concertRepo.findByNameContainingIgnoreCase("Aida").isEmpty()) {
-            Theater theater = theaterRepo.findByNameContainingIgnoreCase("Verona").getFirst();
-            Concert concert = Concert.builder()
-                    .name("Aida")
-                    .date(LocalDate.parse("2023-09-03"))
-                    .theater(theater)
-                    .artists(List.of("Elena Stikhina"))
-                    .photos(List.of(getPhotoAsBase64("https://www.arena.it/site/assets/files/1118/aida-arena-di-verona.jpg")))
-                    .build();
-            concertRepo.save(concert);
-        }
-    }
+//    private void seedConcerts(ConcertRepository concertRepo, TheaterRepository theaterRepo) throws Exception {
+//        concertRepo.deleteAll();
+//        if (concertRepo.findByNameContainingIgnoreCase("Barbiere").isEmpty()) {
+//            Theater theater = theaterRepo.findByNameContainingIgnoreCase("Scala").getFirst();
+//            Concert concert = Concert.builder()
+//                    .name("Il Barbiere di Siviglia")
+//                    .date(LocalDate.parse("2023-09-06"))
+//                    .theater(theater)
+//                    .photos(List.of(getPhotoAsBase64("https://www.teatroallascala.org/static/upload/bar/barbiere-704189badg--ph-brescia-e-amisano---teatro-alla-scala.preset-1920x1080wp.jpg")))
+//                    .build();
+//            concertRepo.save(concert);
+//        }
+//
+//        if (concertRepo.findByNameContainingIgnoreCase("Traviata").isEmpty()) {
+//            Theater theater = theaterRepo.findByNameContainingIgnoreCase("Verona").getFirst();
+//            Concert concert = Concert.builder()
+//                    .name("La Traviata")
+//                    .date(LocalDate.parse("2023-09-06"))
+//                    .theater(theater)
+//                    .artists(List.of("Anna Netrebko", "Freddie de Tommaso"))
+//                    .photos(List.of(getPhotoAsBase64("https://www.opera-online.com/media/images/picture/production_locale/0001/5637/12686/xl_la-traviata_arena-di-verona_090923_ennevifoto_0277.jpg")))
+//                    .build();
+//            concertRepo.save(concert);
+//        }
+//
+//        if (concertRepo.findByNameContainingIgnoreCase("Aida").isEmpty()) {
+//            Theater theater = theaterRepo.findByNameContainingIgnoreCase("Verona").getFirst();
+//            Concert concert = Concert.builder()
+//                    .name("Aida")
+//                    .date(LocalDate.parse("2023-09-03"))
+//                    .theater(theater)
+//                    .artists(List.of("Elena Stikhina"))
+//                    .photos(List.of(getPhotoAsBase64("https://www.arena.it/site/assets/files/1118/aida-arena-di-verona.jpg")))
+//                    .build();
+//            concertRepo.save(concert);
+//        }
+//    }
 
     private String getPhotoAsBase64(String photoUrl) throws Exception {
         // Create OkHttpClient that ignores SSL (for testing only)

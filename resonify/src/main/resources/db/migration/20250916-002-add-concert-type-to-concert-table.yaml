@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4282d2fb-0769-402b-bccf-8c9f3504a814
+      author: nhgiang
+      preConditions:
+        - not:
+            columnExists:
+              tableName: concerts
+              columnName: type
+        - onFail: MARK_RAN
+      changes:
+        - addColumn:
+            tableName: concerts
+            columns:
+              - column:
+                  name: type
+                  type: varchar(50)
+                  constraints:
+                    nullable: true

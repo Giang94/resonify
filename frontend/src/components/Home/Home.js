@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import BackgroundSlideshow from "./BackgroundSlideshow";
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 export default function Home() {
     const navigate = useNavigate();
     const [stats, setStats] = useState({
@@ -11,9 +12,10 @@ export default function Home() {
         cityCount: 0,
         countryCount: 0
     });
+    
 
     useEffect(() => {
-        fetch('http://localhost:8080/api/stats')
+        fetch(`${BASE_URL}/api/stats`)
             .then(res => res.json())
             .then(data => setStats(data))
             .catch(console.error);

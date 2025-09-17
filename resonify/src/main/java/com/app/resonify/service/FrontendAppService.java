@@ -1,6 +1,7 @@
 package com.app.resonify.service;
 
 import com.app.resonify.model.Concert;
+import com.app.resonify.model.ConcertPhoto;
 import com.app.resonify.repository.ConcertRepository;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +52,7 @@ public class FrontendAppService {
 
     public List<String> getPhotos() {
         return concertRepository.findAll().stream()
-                .flatMap(concert -> concert.getPhotos().stream())
+                .flatMap(concert -> concert.getPhotos().stream().map(ConcertPhoto::getPhoto))
                 .toList();
     }
 }
