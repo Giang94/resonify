@@ -27,7 +27,7 @@ public class ConcertForm {
     private String ticket;
 
     // --- changed: artists are no longer simple strings ---
-    private List<UUID> artistIds = new ArrayList<>();
+    private List<String> artists = new ArrayList<>();
 
     private List<ConcertPhoto> photos = new ArrayList<>();
     private List<UUID> photoIds = new ArrayList<>();
@@ -49,9 +49,9 @@ public class ConcertForm {
 
         // --- map artists to IDs ---
         if (concert.getArtists() != null) {
-            form.setArtistIds(
+            form.setArtists(
                     concert.getArtists().stream()
-                            .map(Artist::getId)
+                            .map(Artist::getName)
                             .toList()
             );
         }
@@ -85,8 +85,20 @@ public class ConcertForm {
         concert.setType(this.type);
 
         // --- update artists ---
-        if (this.artistIds != null && !this.artistIds.isEmpty()) {
-            List<Artist> resolvedArtists = artistRepository.findAllById(this.artistIds);
+        if (this.artists != null && !this.artists.isEmpty()) {
+            List<Artist> resolvedArtists = new ArrayList<>();
+            for (String artistName : this.artists) {
+                Optional<Artist> existingArtist = artistRepository.findByNameIgnoreCase(artistName);
+                if (existingArtist.isEmpty()) {
+                    Artist newArtist = new Artist();
+                    newArtist.setName(artistName);
+                    artistRepository.save(newArtist);
+                    resolvedArtists.add(newArtist);
+                } else {
+                    resolvedArtists.add(existingArtist.get());
+                }
+            }
+
             concert.setArtists(new HashSet<>(resolvedArtists));
         } else {
             concert.setArtists(new HashSet<>());

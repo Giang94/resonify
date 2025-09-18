@@ -8,4 +8,6 @@ import java.util.UUID;
 
 public interface ArtistRepository extends JpaRepository<Artist, UUID> {
     Optional<Artist> findByName(String artistName);
+
+    Optional<Artist> findByNameIgnoreCase(String artistName);
 }
