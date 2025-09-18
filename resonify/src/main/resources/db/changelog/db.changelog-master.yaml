@@ -5,3 +5,7 @@ databaseChangeLog:
       file: db/migration/20250916-001-add-collection-tables-constraints.yaml
   - include:
       file: db/migration/20250916-002-add-concert-type-to-concert-table.yaml
+  - include:
+      file: db/migration/20250918-001-add-artist-table.yaml
+  - include:
+      file: db/migration/20250918-002-add-concert-artists-table.yaml

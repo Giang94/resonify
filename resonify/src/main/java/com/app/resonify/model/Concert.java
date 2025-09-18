@@ -8,9 +8,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Data
 @Entity
@@ -34,11 +32,21 @@ public class Concert {
     @ToString.Exclude
     private Theater theater;
 
-    @ElementCollection
-    @CollectionTable(name = "concert_artists", joinColumns = @JoinColumn(name = "concert_id"))
-    @Column(name = "artist")
+//    @ElementCollection
+//    @CollectionTable(name = "concert_artists", joinColumns = @JoinColumn(name = "concert_id"))
+//    @Column(name = "artist")
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    private List<String> artists = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "concert_artists",
+            joinColumns = @JoinColumn(name = "concert_id"),
+            inverseJoinColumns = @JoinColumn(name = "artist_id")
+    )
+    @JsonManagedReference
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<String> artists = new ArrayList<>();
+    private Set<Artist> artists = new HashSet<>();
 
     @OneToMany(mappedBy = "concert", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

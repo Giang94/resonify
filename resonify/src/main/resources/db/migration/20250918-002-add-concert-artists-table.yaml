@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: e9b7e5be-3102-461f-8b20-34c3c0f890e6
+      author: nhgiang
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: concert_artists
+      changes:
+        - createTable:
+            tableName: concert_artists
+            columns:
+              - column:
+                  name: concert_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: artist_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: concert_artists
+            columnNames: concert_id, artist_id
+            constraintName: pk_concert_artists
+
+        - addForeignKeyConstraint:
+            baseTableName: concert_artists
+            baseColumnNames: concert_id
+            constraintName: fk_concert_artists_concert
+            referencedTableName: concerts
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: concert_artists
+            baseColumnNames: artist_id
+            constraintName: fk_concert_artists_artist
+            referencedTableName: artists
+            referencedColumnNames: id

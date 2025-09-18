@@ -64,25 +64,31 @@
 }
 
 .concert-main {
-  display: flex;
-  justify-content: center;
-  background: #eee;
-  border-radius: 8px;
-
-  max-height: 260px;   /* cap the height */
-  max-width: 100%;     /* don’t exceed modal width */
-  overflow: hidden;    /* no scrollbars */
-  margin: 0 auto;      /* center in modal */
+    display: flex;
+    justify-content: center;
+    background: #eee;
+    border-radius: 8px;
+    align-items: center;
+    max-height: 260px;
+    /* cap the height */
+    max-width: 100%;
+    /* don’t exceed modal width */
+    overflow: hidden;
+    /* no scrollbars */
+    margin: 0 auto;
+    /* center in modal */
 }
 
 .concert-main img {
-  max-height: 100%;
-  height: auto;
-  width: auto;
-  max-width: 100%;     /* responsive for small screens */
-  object-fit: contain; /* full image, no crop */
-  display: block;
-  border-radius: 8px;
+    max-height: 100%;
+    height: auto;
+    width: auto;
+    max-width: 100%;
+    /* responsive for small screens */
+    object-fit: contain;
+    /* full image, no crop */
+    display: block;
+    border-radius: 8px;
 }
 
 .thumb-nav {

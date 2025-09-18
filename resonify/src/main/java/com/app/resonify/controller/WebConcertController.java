@@ -1,18 +1,16 @@
 package com.app.resonify.controller;
 
 import com.app.resonify.model.Concert;
-import com.app.resonify.model.ConcertPhoto;
 import com.app.resonify.model.enums.ConcertType;
 import com.app.resonify.model.form.ConcertForm;
+import com.app.resonify.repository.ArtistRepository;
 import com.app.resonify.repository.ConcertRepository;
 import com.app.resonify.repository.TheaterRepository;
-import com.app.resonify.utils.PhotoHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,20 +21,22 @@ public class WebConcertController {
     private final String LAYOUT = "layout";
     private final ConcertRepository concertRepo;
     private final TheaterRepository theaterRepo;
+    private final ArtistRepository artistRepo;
 
-    public WebConcertController(ConcertRepository concertRepo, TheaterRepository theaterRepo) {
+    public WebConcertController(ConcertRepository concertRepo, TheaterRepository theaterRepo, ArtistRepository artistRepo) {
         this.concertRepo = concertRepo;
         this.theaterRepo = theaterRepo;
+        this.artistRepo = artistRepo;
     }
 
     // List concerts
     @GetMapping("/list")
     public String listConcerts(Model model) {
         List<Concert> concerts = concertRepo.findAll()
-                        .stream().map(c -> {
-                            c.setPhotos(null);
-                            return c;
-                        }).toList();
+                .stream().map(c -> {
+                    c.setPhotos(null);
+                    return c;
+                }).toList();
         model.addAttribute("concerts", concerts);
         model.addAttribute("types", ConcertType.values());
         model.addAttribute("pageTitle", "Concerts List");
@@ -61,7 +61,7 @@ public class WebConcertController {
     @PostMapping
     public String saveConcert(@ModelAttribute ConcertForm form) throws IOException {
         Concert concert = new Concert();
-        form.updateEntity(concert, theaterRepo);
+        form.updateEntity(concert, theaterRepo, artistRepo);
 
         concertRepo.save(concert);
         return "redirect:/web/concerts/add";
@@ -90,7 +90,7 @@ public class WebConcertController {
         Concert concert = concertRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid concert Id:" + id));
 
-        form.updateEntity(concert, theaterRepo);
+        form.updateEntity(concert, theaterRepo, artistRepo);
         concertRepo.save(concert);
 
         return "redirect:/web/concerts/list";

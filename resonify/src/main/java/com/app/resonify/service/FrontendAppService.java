@@ -18,7 +18,7 @@ public class FrontendAppService {
     }
 
     public List<Concert> getAllConcerts() {
-        return concertRepository.findAll();
+        return concertRepository.findAllWithArtists();
     }
 
     public Map<String, Long> getStats() {

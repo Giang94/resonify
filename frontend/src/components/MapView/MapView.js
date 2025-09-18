@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, ZoomControl } from "react-leaflet";
+import { MapContainer, TileLayer, ZoomControl, GeoJSON, Marker } from "react-leaflet";
 import groupByLevel from "../utils/groupByLevel";
 import { SyncZoom } from "./SyncZoom";
 import { createCheckinIcon } from "../utils/leafletIcon";
-import MapResetButton from "./MapResetButton.js";
+import MapResetButton from "./MapResetButton";
 import "./MapView.css";
-import ConcertModal from "./ConcertModal.js";
+import ConcertModal from "./ConcertModal";
+import worldGeoJson from "../data/world.geo.json";
+import { styleCountry, onEachCountry } from "../utils/mapColoring";
+
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 export default function MapView() {
   const [concerts, setConcerts] = useState([]);
   const [zoomLevel, setZoomLevel] = useState("country");
@@ -15,22 +19,31 @@ export default function MapView() {
 
   const [theaterConcerts, setTheaterConcerts] = useState([]);
   const [selectedConcert, setSelectedConcert] = useState(null);
+  const [expandedYears, setExpandedYears] = useState({});
 
+  // Fetch summary data
   useEffect(() => {
-    fetch(`${BASE_URL}/api/concerts`)
+    fetch(`${BASE_URL}/api/concerts/summary`)
       .then((res) => res.json())
       .then((data) => {
         const sorted = data.sort(
-          (b, a) => new Date(a.date) - new Date(b.date) // ascending
+          (b, a) => new Date(a.date) - new Date(b.date) // newest first
         );
         setConcerts(sorted);
       })
       .catch(console.error);
   }, []);
 
+  // Count concerts per country for coloring
+  const concertCountsByCountry = concerts.reduce((acc, concert) => {
+    const countryName = concert.countryName;
+    if (!acc[countryName]) acc[countryName] = 0;
+    acc[countryName]++;
+    return acc;
+  }, {});
+
   const dataToShow = groupByLevel(concerts, zoomLevel);
 
-  // Panel open if theaterConcerts is set and zoomLevel is theaterDetails
   const panelOpen = theaterConcerts.length > 0;
 
   const handlePanelClose = () => {
@@ -38,52 +51,118 @@ export default function MapView() {
   };
 
   const handleMapClick = (e) => {
-    // Prevent closing when clicking map controls or markers
-    if (e.target.classList.contains('leaflet-control') ||
-      e.target.closest('.leaflet-control') ||
-      e.target.classList.contains('leaflet-marker-icon')) {
+    if (
+      e.target.classList.contains("leaflet-control") ||
+      e.target.closest(".leaflet-control") ||
+      e.target.classList.contains("leaflet-marker-icon")
+    ) {
       return;
     }
-
     if (panelOpen) {
       handlePanelClose();
     }
   };
 
+  const toggleYear = (year) => {
+    setExpandedYears((prev) => ({
+      ...prev,
+      [year]: !prev[year],
+    }));
+  };
+
+  // Group theater concerts by year
+  const concertsByYear = theaterConcerts.reduce((acc, concert) => {
+    const year = new Date(concert.date).getFullYear();
+    if (!acc[year]) acc[year] = [];
+    acc[year].push(concert);
+    return acc;
+  }, {});
+
+  useEffect(() => {
+    const allYears = concerts.reduce((acc, c) => {
+      const year = new Date(c.date).getFullYear();
+      acc[year] = true;
+      return acc;
+    }, {});
+    setExpandedYears(allYears);
+  }, [concerts]);
+
   return (
-    <div className={`mapview-container`}>
-      {/* Only render panel if open */}
+    <div className="mapview-container">
       {panelOpen && (
         <div className="concert-panel open">
-          <h2>Concerts at {theaterConcerts[0].theater.name}</h2>
-          {theaterConcerts.map((concert) => (
-            <div
-              className="concert-item"
-              key={concert.id}
-              style={{
-                background: concert.photos?.[0]?.photo
-                  ? `linear-gradient(rgba(42, 42, 61, 0.3), rgba(42, 42, 61, 0.3)), url(${concert.photos[[Math.floor(Math.random() * concert.photos.length)]].photo})`
-                  : '#2a2a3d',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center'
-              }}
-              onClick={() => setSelectedConcert(concert)}
-            >
-              <h3>{concert.type}: {concert.name}</h3>
-              <div>{concert.date}</div>
-              <small>{concert.artist}</small>
-            </div>
-          ))}
+          <h2>Concerts at {theaterConcerts[0].theaterName}</h2>
+
+          {Object.keys(concertsByYear)
+            .sort((a, b) => b - a)
+            .map((year) => {
+              const yearConcerts = concertsByYear[year];
+
+              return (
+                <div key={year} className="year-section">
+                  <div className="year-header" onClick={() => toggleYear(year)}>
+                    <span className="year-label">
+                      {year} ({yearConcerts.length})
+                    </span>
+                    <span className="year-toggle">
+                      {expandedYears[year] ? "▴" : "▾"}
+                    </span>
+                  </div>
+
+                  {expandedYears[year] && (
+                    <div className="concert-list">
+                      {yearConcerts.map((concert) => (
+                        <div
+                          className="concert-item"
+                          key={concert.id}
+                          style={{
+                            background: concert.photo
+                              ? `linear-gradient(rgba(42,42,61,0.3), rgba(42,42,61,0.3)), url(${concert.photo}) center/cover no-repeat`
+                              : "#2a2a3d",
+                          }}
+                          onClick={() => setSelectedConcert(concert)}
+                        >
+                          <h3>
+                            {concert.type}: {concert.name}
+                          </h3>
+                          <div>{concert.date}</div>
+                          <small>
+                            {concert.artists?.map((artist) => (
+                              <span key={artist.id} style={{ marginRight: "0.5rem" }}>
+                                {artist.photo && (
+                                  <img
+                                    src={artist.photo}
+                                    alt={artist.name}
+                                    style={{
+                                      width: "24px",
+                                      height: "24px",
+                                      borderRadius: "50%",
+                                      objectFit: "cover",
+                                      marginRight: "0.25rem",
+                                      verticalAlign: "middle",
+                                    }}
+                                  />
+                                )}
+                                {artist.name}
+                              </span>
+                            ))}
+                          </small>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
         </div>
       )}
 
-      {/* Map container, shifted when panel is open */}
       <div
         className={`map-container${panelOpen ? " shifted" : ""}`}
         onClick={handleMapClick}
       >
         <MapContainer
-          worldCopyJump={true}
+          worldCopyJump
           center={mapCenter}
           zoom={mapZoom}
           minZoom={3}
@@ -100,9 +179,16 @@ export default function MapView() {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
           />
 
+          <GeoJSON
+            data={worldGeoJson}
+            style={styleCountry(concertCountsByCountry)}
+            onEachFeature={onEachCountry(concertCountsByCountry)}
+          />
+
           <div style={{ zIndex: 1000 }}>
             <ZoomControl position="topright" />
           </div>
+
           <SyncZoom setZoomLevel={setZoomLevel} setMapZoom={setMapZoom} />
           <MapResetButton
             setZoomLevel={setZoomLevel}
@@ -110,21 +196,28 @@ export default function MapView() {
             setMapCenter={setMapCenter}
             handlePanelClose={handlePanelClose}
           />
+
           {Object.entries(dataToShow).map(([key, items]) => {
             const first = items[0];
             const count = items.length;
 
-            if (
-              !first.theater ||
-              first.theater.lat == null ||
-              first.theater.lng == null
-            )
-              return null;
+            if (first.theaterLat == null || first.theaterLng == null) return null;
+
+            // Function to fetch concerts for this theater
+            const fetchTheaterConcerts = async (theaterId) => {
+              try {
+                const res = await fetch(`${BASE_URL}/api/theaters/${theaterId}/concerts`);
+                const data = await res.json();
+                setTheaterConcerts(data);
+              } catch (err) {
+                console.error("Failed to fetch theater concerts", err);
+              }
+            };
 
             return (
               <Marker
                 key={key}
-                position={[first.theater.lat, first.theater.lng]}
+                position={[first.theaterLat, first.theaterLng]}
                 icon={createCheckinIcon(count)}
                 eventHandlers={{
                   click: (e) => {
@@ -132,57 +225,29 @@ export default function MapView() {
 
                     if (zoomLevel === "country") {
                       setZoomLevel("city");
-                      setMapCenter([first.theater.lat, first.theater.lng]);
+                      setMapCenter([first.theaterLat, first.theaterLng]);
                       setMapZoom(7);
-                      map.flyTo([first.theater.lat, first.theater.lng], 7);
+                      map.flyTo([first.theaterLat, first.theaterLng], 7);
                     } else if (zoomLevel === "city") {
                       setZoomLevel("theater");
-                      setMapCenter([first.theater.lat, first.theater.lng]);
+                      setMapCenter([first.theaterLat, first.theaterLng]);
                       setMapZoom(12);
-                      map.flyTo([first.theater.lat, first.theater.lng], 12);
+                      map.flyTo([first.theaterLat, first.theaterLng], 12);
                     } else if (zoomLevel === "theater") {
                       setZoomLevel("theaterDetails");
-                      setMapCenter([first.theater.lat, first.theater.lng]);
+                      setMapCenter([first.theaterLat, first.theaterLng]);
                       setMapZoom(18);
-                      map.flyTo([first.theater.lat, first.theater.lng], 18);
-                      setTheaterConcerts(items); // Set concerts for panel
-                    } else if (zoomLevel === "theaterDetails") {
-                      setTheaterConcerts(items);
+                      map.flyTo([first.theaterLat, first.theaterLng], 18);
+                      fetchTheaterConcerts(first.theaterId); // <-- fetch here
                     }
-                  },
-                  mouseover: (e) => {
-                    let popupContent = '';
-
-                    if (zoomLevel === "country") {
-                      popupContent = `<div style="text-align:center;">${first.theater.city.country.name}</div>`;
-                    } else if (zoomLevel === "city") {
-                      popupContent = `<div style="text-align:center;">${first.theater.city.name}</div>`;
-                    } else if (zoomLevel === "theater" || zoomLevel === "theaterDetails") {
-                      popupContent = `
-                      <div style="text-align:center; max-width:250px;">
-                        ${first.theater.photo
-                          ? `<img src="${first.theater.photo}" style="width:100%; border-radius:8px;" />`
-                          : ""
-                        }
-                        <div style="margin-top:5px;">${first.theater.name}</div>
-                      </div>`;
-                    }
-
-                    const popup = e.target.bindPopup(popupContent, {
-                      maxWidth: 300,
-                      minWidth: 200,
-                      autoPan: true
-                    });
-                    popup.openPopup();
-                  },
-                  mouseout: (e) => {
-                    e.target.closePopup();
                   },
                 }}
               />
             );
           })}
+
         </MapContainer>
+
         {selectedConcert && (
           <ConcertModal
             concert={selectedConcert}

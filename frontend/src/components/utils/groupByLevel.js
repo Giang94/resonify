@@ -6,16 +6,16 @@ export default function groupByLevel(concerts, level) {
 
     switch (level) {
       case "country":
-        key = c.theater?.city?.country?.name;
+        key = c.countryName;
         break;
       case "city":
-        key = c.theater?.city?.name;
+        key = c.cityName;
         break;
       case "theater":
-        key = c.theater?.name;
+        key = c.theaterName;
         break;
       case "theaterDetails":
-        key = c.theater?.name;
+        key = c.theaterName;
         break;
       default:
         key = "unknown";

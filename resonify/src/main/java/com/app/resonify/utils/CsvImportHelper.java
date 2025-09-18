@@ -101,7 +101,6 @@ public class CsvImportHelper {
             LocalDate date = LocalDate.parse(parts[1].trim());
             List<String> artists = Arrays.stream(parts[2].split(",")).map(String::trim).toList();
             String theaterName = parts[3].trim();
-            //List<String> photos = Arrays.stream(parts[4].split(",")).map(String::trim).toList();
 
             Theater theater = theaterRepo.findByName(theaterName).orElseThrow(() -> new RuntimeException("Theater not found: " + theaterName));
 
@@ -109,19 +108,8 @@ public class CsvImportHelper {
                 Concert concert = new Concert();
                 concert.setName(name);
                 concert.setDate(date);
-                concert.setArtists(artists);
+                // concert.setArtists(artists);
                 concert.setTheater(theater);
-//                concert.setPhotos(
-//                        photos.stream()
-//                                .map(url -> {
-//                                    try {
-//                                        return CsvImportHelper.getPhotoAsBase64(url);
-//                                    } catch (Exception e) {
-//                                        throw new RuntimeException("Failed to fetch photo: " + url, e);
-//                                    }
-//                                })
-//                                .toList()
-//                );
                 concertRepo.save(concert);
                 count++;
             }

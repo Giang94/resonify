@@ -1,3 +1,5 @@
+@import "https://unpkg.com/leaflet/dist/leaflet.css";
+
 .concert-marker {
   background-color: #ff6666;
   color: white;
@@ -150,4 +152,49 @@
 
 .close-button:hover {
   opacity: 1;
+}
+
+.year-section {
+  margin: 1.2rem 0;
+  position: relative;
+}
+
+.year-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  justify-content: space-between;
+  position: relative;
+  padding: 0.6rem 0;
+}
+
+/* the line */
+.year-header::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #555;
+  z-index: 0;
+}
+
+/* year label "floats" above the line */
+.year-label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  background-color: #1e1e2e; /* match panel background */
+  padding: 0 0.6rem;
+  z-index: 1;
+}
+
+/* arrow is also above the line */
+.year-toggle {
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: #aaa;
+  background-color: #1e1e2e; /* patch behind it */
+  padding: 0 0.4rem;
+  z-index: 1;
 }
