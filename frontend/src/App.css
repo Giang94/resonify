@@ -189,3 +189,9 @@ body, html, #root {
   right: 15px;
   cursor: pointer;
 }
+
+body {
+  background: var(--bg-main);
+  color: var(--text-main);
+  font-family: 'Segoe UI', Arial, sans-serif;
+}

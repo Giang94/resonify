@@ -22,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +35,65 @@ public class ResonifyApplication {
     public static void main(String[] args) {
         SpringApplication.run(ResonifyApplication.class, args);
     }
+
+//    @Bean
+//    CommandLineRunner importArtists(ArtistRepository artistRepository) {
+//        return args -> {
+//            int countFound = 0;
+//            List<Artist> artists = artistRepository.findAll();
+//
+//            String photoFolderPath = "C:\\Users\\nhgiang\\Desktop\\artists-crop\\resized";
+//            File photoFolder = new File(photoFolderPath);
+//            if (!photoFolder.isDirectory()) {
+//                System.out.println("Invalid folder path!");
+//                return;
+//            }
+//            File[] photos = photoFolder.listFiles((dir, name) -> name.toLowerCase().endsWith(".jpg"));
+//            if (photos == null) return;
+//
+//            for (Artist artist : artists) {
+//                String normalizedArtist = normalizeName(artist.getName());
+//                File matchedPhoto = null;
+//
+//                for (File photo : photos) {
+//                    String normalizedPhoto = normalizeName(photo.getName().replaceAll("\\.jpg$", ""));
+//                    if (normalizedPhoto.equals(normalizedArtist)) {
+//                        matchedPhoto = photo;
+//                        break;
+//                    }
+//                }
+//
+//                if (matchedPhoto != null) {
+//                    String base64 = encodeFileToBase64(matchedPhoto);
+//                    String base64WithPrefix = "data:image/jpeg;base64," + base64;
+//                    artist.setPhoto(base64WithPrefix);
+//                    artistRepository.save(artist);
+//                    System.out.println("Artist: " + artist.getName() + " -> Photo: " + matchedPhoto.getName());
+//                    countFound++;
+//                } else {
+//                    System.out.println("No photo found for: " + artist.getName());
+//                }
+//            }
+//
+//            System.out.println("Total artists: " + artists.size() + ", Photos found: " + countFound);
+//        };
+//    }
+//
+//    private static String encodeFileToBase64(File file) throws IOException {
+//        try (FileInputStream fis = new FileInputStream(file)) {
+//            byte[] bytes = fis.readAllBytes();
+//            return Base64.getEncoder().encodeToString(bytes);
+//        }
+//    }
+//
+//    // Normalize function: lowercase, remove diacritics, convert đ->d, replace non-alphanum with _
+//    private static String normalizeName(String name) {
+//        String normalized = Normalizer.normalize(name, Normalizer.Form.NFD)
+//                .replaceAll("đ", "d")
+//                .replaceAll("Đ", "D")
+//                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+//        return normalized.toLowerCase().replaceAll("[^a-z0-9]", "_");
+//    }
 
 //    @Bean
 //    CommandLineRunner importArtists(ArtistImportService artistImportService) {

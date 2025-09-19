@@ -1,190 +1,291 @@
-/* ConcertModal.css */
+/* Modal Overlay */
 .concert-modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.65);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 3000;
-    padding: 20px;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  overflow-y: auto;
+  z-index: 9999;
 }
 
+/* Modal Container */
 .concert-modal {
-    width: min(750px, 96%);
-    max-height: 90vh;
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-    position: relative;
-    display: flex;
-    flex-direction: column;
+  position: relative;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  background: var(--bg-main, #fff8dc);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(184, 134, 11, 0.15);
+  border: 2px solid var(--gold-border, #e6be8a);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
+/* Close Button */
 .concert-modal-close {
-    position: absolute;
-    right: 12px;
-    top: 8px;
-    border: none;
-    background: transparent;
-    font-size: 20px;
-    cursor: pointer;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: #B8860B; /* Dark gold for contrast */
+  cursor: pointer;
+  z-index: 20;
+  transition: color 0.2s;
 }
 
+.concert-modal-close:hover {
+  color: #222;
+}
+
+/* Modal Header */
 .concert-modal-header {
-    padding: 18px 20px 0 20px;
+  position: sticky;
+  top: 0;
+  background: var(--gold-light, #fff8dc);
+  z-index: 10;
+  padding: 1rem;
+  border-bottom: 2px solid var(--gold-border, #e6be8a);
 }
 
-.concert-title {
-    margin: 0;
-    font-size: 20px;
-}
-
-.concert-meta {
-    color: #666;
-    font-size: 13px;
-    margin-top: 6px;
-}
-
+/* Modal Body */
 .concert-modal-body {
-    display: flex;
-    gap: 16px;
-    padding: 16px;
-    align-items: flex-start;
-    overflow: auto;
+  height: 400px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  position: relative;
+  background: #fff;
+  border-radius: 8px;
+  padding: 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-snap-type: y mandatory;
 }
 
-/* gallery */
-.concert-gallery {
-    flex: 1 1 30%;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+.concert-modal-body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background: transparent;
 }
 
-.concert-main {
-    display: flex;
-    justify-content: center;
-    background: #eee;
-    border-radius: 8px;
-    align-items: center;
-    max-height: 260px;
-    /* cap the height */
-    max-width: 100%;
-    /* don’t exceed modal width */
-    overflow: hidden;
-    /* no scrollbars */
-    margin: 0 auto;
-    /* center in modal */
+/* Pages */
+.modal-page {
+  height: 400px;
+  min-height: 400px;
+  position: relative;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* Ensure content starts at the top */
+  scroll-snap-align: start;
 }
 
+/* Artists Page */
+.page-artists {
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  
+  /* Align content to top */
+  align-items: center;
+  padding: 0 1rem 0 1rem;
+  /* Top padding for arrow button */
+  box-sizing: border-box;
+}
+
+/* Artist Grid */
+.artist-grid {
+  display: grid;
+  gap: 16px;
+  justify-items: center;
+  justify-content: center; /* <-- This centers the grid columns */
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.artist-grid.cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 160px));
+}
+
+.artist-grid.cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 160px));
+}
+
+.artist-grid.cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 160px));
+}
+
+.artist-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.artist-item img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 8px;
+  background: #eee;
+  border: 2px solid var(--gold-border, #e6be8a);
+}
+
+/* Gallery Page */
+.page-gallery {
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 1rem 0 1rem;
+  /* Top padding for arrow button */
+  box-sizing: border-box;
+}
+
+/* Gallery Main Image */
 .concert-main img {
-    max-height: 100%;
-    height: auto;
-    width: auto;
-    max-width: 100%;
-    /* responsive for small screens */
-    object-fit: contain;
-    /* full image, no crop */
-    display: block;
-    border-radius: 8px;
+  max-width: 100%;
+  max-height: 240px;
+  border-radius: 8px;
+  margin: 0 auto;
+  display: block;
 }
 
-.thumb-nav {
-    width: 36px;
-    height: 36px;
-    font-size: 20px;
-    border-radius: 8px;
-    border: none;
-    background: rgba(0, 0, 0, 0.06);
-    cursor: pointer;
+/* Thumbnails */
+.concert-thumbs-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16px;
+  gap: 8px;
 }
 
 .thumb-list {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding: 6px 0;
+  display: flex;
+  gap: 8px;
 }
 
 .thumb {
-    border: none;
-    padding: 0;
-    background: transparent;
-    width: 86px;
-    height: 56px;
-    border-radius: 6px;
-    overflow: hidden;
-    cursor: pointer;
-    flex: 0 0 auto;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 4px;
+  outline: none;
 }
 
 .thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  transition: border 0.2s;
 }
 
-.thumb.active {
-    outline: 3px solid #3b82f6;
-    /* blue highlight */
-    transform: scale(1.02);
+.thumb.active img {
+  border-color: var(--gold-main, #ffd700);
 }
 
-/* details column */
-.concert-details {
-    flex: 0 0 35%;
-    padding-right: 12px;
-    color: #222;
-    font-size: 14px;
+.thumb-nav {
+  background: #eee;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.concert-description {
-    margin-top: 10px;
-    color: #444;
-    line-height: 1.4;
+/* No Photo */
+.no-photo {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  font-size: 1rem;
 }
 
-/* mobile tweaks */
-@media (max-width: 900px) {
-    .concert-modal-body {
-        flex-direction: column;
-    }
-
-    .concert-details {
-        width: 100%;
-    }
+/* Scroll Buttons */
+.scroll-toggle {
+  position: absolute;
+  right: 24px;
+  left: auto;
+  transform: none;
+  width: 40px;
+  height: 40px;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-main, #ffd700) 60%, var(--gold-accent, #ffc300) 100%);
+  color: var(--text-main, #222);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 16px rgba(184, 134, 11, 0.18);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  border: 1px solid var(--gold-border, #e6be8a);
+  opacity: 0.92;
 }
 
-.concert-thumbs-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* center the entire row */
-    gap: 0.5rem;
-    margin-top: 1rem;
+.scroll-toggle.down {
+  bottom: 16px;
+  top: auto;
 }
 
-.thumb-list {
-    display: flex;
-    gap: 0.5rem;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-
-    /* center the scrollable list */
-    justify-content: center;
-    flex: 0 1 auto;
-    max-width: 80%;
-    /* keeps it from stretching too wide */
-
-    /* hide scrollbar */
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+.scroll-toggle.up {
+  bottom: 16px;
+  top: auto;
 }
 
-.thumb-list::-webkit-scrollbar {
-    display: none;
+/* Concert Meta */
+.concert-meta {
+  font-size: 1.05rem;
+  color: var(--gold-dark, #B8860B);
+  font-weight: 500;
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+/* Responsive Artist Grid */
+@media (min-width: 600px) {
+  .artist-grid.cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 160px));
+    gap: 24px;
+  }
+  .artist-grid.cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 160px));
+    gap: 24px;
+  }
+}
+
+@media (max-width: 500px) {
+
+  .artist-grid.cols-2,
+  .artist-grid.cols-3 {
+    grid-template-columns: 1fr;
+  }
 }

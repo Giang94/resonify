@@ -123,7 +123,9 @@ export default function MapView() {
                           onClick={() => setSelectedConcert(concert)}
                         >
                           <h3>
-                            {concert.type}: {concert.name}
+                            {concert.type === "VISIT"
+                              ? `${concert.type}`
+                              : `${concert.type}: ${concert.name}`}
                           </h3>
                           <div>{concert.date}</div>
                           <small>
@@ -233,13 +235,41 @@ export default function MapView() {
                       setMapCenter([first.theaterLat, first.theaterLng]);
                       setMapZoom(12);
                       map.flyTo([first.theaterLat, first.theaterLng], 12);
-                    } else if (zoomLevel === "theater") {
+                    } else if (zoomLevel === "theater" || zoomLevel === "theaterDetails") {
                       setZoomLevel("theaterDetails");
                       setMapCenter([first.theaterLat, first.theaterLng]);
                       setMapZoom(18);
                       map.flyTo([first.theaterLat, first.theaterLng], 18);
-                      fetchTheaterConcerts(first.theaterId); // <-- fetch here
+                      fetchTheaterConcerts(first.theaterId);
                     }
+                  },
+                  mouseover: (e) => {
+                    let popupContent = '';
+
+                    if (zoomLevel === "country") {
+                      popupContent = `<div style="text-align:center;">${first.countryName}</div>`;
+                    } else if (zoomLevel === "city") {
+                      popupContent = `<div style="text-align:center;">${first.cityName}</div>`;
+                    } else if (zoomLevel === "theater" || zoomLevel === "theaterDetails") {
+                      popupContent = `
+                      <div style="text-align:center; max-width:250px;">
+                        ${first.theaterPhoto
+                          ? `<img src="${first.theaterPhoto}" style="width:100%; border-radius:8px;" />`
+                          : ""
+                        }
+                        <div style="margin-top:5px;">${first.theaterName}</div>
+                      </div>`;
+                    }
+
+                    const popup = e.target.bindPopup(popupContent, {
+                      maxWidth: 300,
+                      minWidth: 200,
+                      autoPan: true
+                    });
+                    popup.openPopup();
+                  },
+                  mouseout: (e) => {
+                    e.target.closePopup();
                   },
                 }}
               />

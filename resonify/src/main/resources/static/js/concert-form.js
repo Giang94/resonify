@@ -46,6 +46,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     renderTags();
+
+    const form = container.closest('form');
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        const val = input.value.trim();
+        if (val && !tags.includes(val)) {
+          tags.push(val);
+          input.value = '';
+          hiddenField.value = tags.join(',');
+        }
+      });
+    }
   }
 
 });

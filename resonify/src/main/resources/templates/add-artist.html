@@ -1,0 +1,13 @@
+<!-- File: src/main/resources/templates/add-artist.html -->
+<div th:fragment="content">
+	<h2>Add Artist</h2>
+	<form th:action="@{/web/artists}" th:object="${artist}" method="post">
+		<label for="name">Name:</label>
+		<input type="text" id="name" th:field="*{name}" required />
+		
+		<label for="country">Photo URL:</label>
+		<input type="text" id="country" th:field="*{country}" required />
+		
+		<button type="submit">Add Artist</button>
+	</form>
+</div>
